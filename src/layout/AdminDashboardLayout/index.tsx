@@ -54,7 +54,7 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
         </div>
         <div
           css={{
-            position: "absolute",
+            position: "fixed",
             left: 0,
             top: 112,
             height: "100vh",
