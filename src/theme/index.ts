@@ -5,6 +5,7 @@ export const theme: ITheme = {
     background: "#FEFEFE",
     black: "#333333",
     black_2: "rgba(51,51,51,0.3)",
+    black_3: "rgba(51,51,51,0.1)",
     white: "#fff",
     transparent: "transparent",
     green: "#37BD3C",
