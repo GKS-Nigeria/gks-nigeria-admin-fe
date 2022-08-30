@@ -32,8 +32,12 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
           className="top-nav d-flex justify-content-between align-items-center"
           css={{
             borderBottom: `1px solid ${[palette.black_2]}`,
-            padding: ".25rem .25rem",
+            // padding: ".25rem .25rem",
+            width: "100vw",
+            zIndex: "2",
             backgroundColor: "#fff",
+            position: "fixed",
+            top: 0,
           }}
         >
           <div className="d-flex justify-content-start align-items-center p-4">
@@ -56,7 +60,7 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
           css={{
             position: "fixed",
             left: 0,
-            top: 112,
+            top: 106,
             height: "100vh",
             maxWidth: 308,
             width: "100%",
@@ -66,7 +70,7 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
         >
           <SideNav />
         </div>
-        <div css={{ marginLeft: "310px", marginTop: "20px" }}>{children}</div>
+        <div css={{ marginLeft: "310px", paddingTop: "120px",  }}>{children}</div>
       </main>
     </>
   );
