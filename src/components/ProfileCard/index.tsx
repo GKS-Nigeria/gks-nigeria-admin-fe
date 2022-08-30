@@ -74,6 +74,24 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
       group: "choir",
       name: "Joseph Olaitan",
     },
+    {
+      _id: "5",
+      branch: "Lekki",
+      group: "choir",
+      name: "Joseph Olaitan",
+    },
+    {
+      _id: "5",
+      branch: "Lekki",
+      group: "choir",
+      name: "Joseph Olaitan",
+    },
+    {
+      _id: "5",
+      branch: "Lekki",
+      group: "choir",
+      name: "Joseph Olaitan",
+    },
   ];
   return (
     <div className="d-flex flex-wrap ">
@@ -175,7 +193,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
                 {user.group}
               </CardSubtitle>
               <Text color="white" className="fs-14">
-                <img src={Location} alt="" css={{ paddingRight: "6px" }} />
+                <img src={Location} alt="" css={{ paddingRight: "8px" }} />
                 {user.branch}
               </Text>
             </CardBody>
