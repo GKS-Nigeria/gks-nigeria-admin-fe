@@ -17,13 +17,15 @@ import { SideModal } from "../../../lib/SideModal";
 import { useTheme } from "@emotion/react";
 import Close from "../../../assets/icons/close.svg";
 
-
 interface ModalProps {
   showModal: boolean;
   toggle: () => void;
 }
 
-const CreateBranchModal: React.FC<ModalProps> = ({ showModal, toggle }) => {
+const CreateJuniorAdminModal: React.FC<ModalProps> = ({
+  showModal,
+  toggle,
+}) => {
   const [branchName, setBranchName] = useState<any[] | null>(null);
   const [branhAddress, setBranchAddress] = useState<any[] | null>(null);
   const [branchNameInput, setBranchNameInput] = useState("");
@@ -37,73 +39,69 @@ const CreateBranchModal: React.FC<ModalProps> = ({ showModal, toggle }) => {
     setBranchAddressInput(e.target.value);
   };
 
-  const resetModal = () => {
-    setBranchNameInput("");
-    setBranchName([]);
-    setBranchAddressInput("");
-    setBranchAddress([]);
-  };
+
+
+  const labels = ["first name", "last name", "email", "phone number"];
 
   return (
     <SideModal
       isOpen={showModal}
       fullscreen
       toggle={toggle}
-      onClosed={resetModal}
     >
       <ModalHeader className="border-0 ">
         <div className="d-flex">
-        <Text color="blue_6" className="fs-22 pb-4 fw-bold text-capitalize">
-          Create branch
-        </Text>
-        <div onClick={toggle} css={{marginLeft:230}}>
-        <img src={Close} alt="" />
-        </div>
+          <Text color="blue_6" className="fs-22 pb-4 fw-bold text-capitalize">
+            Create junior admin
+          </Text>
+          <div onClick={toggle} css={{ marginLeft: 160 }}>
+            <img src={Close} alt="" />
+          </div>
         </div>
       </ModalHeader>
-
       <ModalBody>
         <FormGroup className="mb-3">
+          {labels.map((label, idx) => {
+            return (
+              <div key={idx}>
+                <Label>
+                  <Text
+                    color="blue_6"
+                    className="fs-13 fw-bold text-capitalize mb-1"
+                  >
+                    {label}
+                  </Text>
+                </Label>
+                <Input
+                  id="juniorAdmin"
+                  type="text"
+                  // value={branchNameInput}
+                  // onChange={nameInput}
+                  placeholder={label}
+                  className="mb-3"
+                />
+              </div>
+            );
+          })}
           <Label for="branchName">
             <Text color="blue_6" className="fs-13 fw-bold text-capitalize mb-1">
-              Branch Name
+              assign to branch
             </Text>
           </Label>
-          <Input
-            id="branchName"
-            type="text"
-            value={branchNameInput}
-            onChange={nameInput}
-            placeholder="Branch Name"
-          />
-          <Label for="address">
-            <Text
-              color="blue_6"
-              className="fs-13 fw-bold text-capitalize mb-1 mt-4"
-            >
-              Address
-            </Text>
-          </Label>
-          <Input
-            id="address"
-            type="text"
-            value={branchAddressInput}
-            onChange={addressInput}
-            placeholder="Address"
-          />
+          <Input id="branchName" type="select" placeholder="Junior admin" />
         </FormGroup>
         <Button
           variant="green"
           css={{ width: "100%", marginTop: "50px" }}
-          className="btn fw-bold"
+          className="fw-bold"
           onClick={toggle}
         >
           Create
         </Button>
       </ModalBody>
-\
+      \
     </SideModal>
   );
 };
 
-export default CreateBranchModal;
+export default CreateJuniorAdminModal;

@@ -1,8 +1,9 @@
 export interface UIState {
     modals: {
       [Modals.ASSIGN_JUNIOR_ADMIN]: ModalProps;
-      [Modals.CREATE_BRANCH]: ModalProps;
       
+      [Modals.CREATE_BRANCH]: ModalProps;
+      [Modals.CREATE_JUNIOR_ADMIN]: ModalProps;
     };
     redirectUrl?: string;
   }
@@ -15,6 +16,7 @@ export interface UIState {
   export enum Modals {
     ASSIGN_JUNIOR_ADMIN = "assignJuniorAdmin",
     CREATE_BRANCH = "createBranch",
+    CREATE_JUNIOR_ADMIN = "createJuniorAdmin",
    
   }
   
