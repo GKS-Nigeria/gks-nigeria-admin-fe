@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 export const Input = styled(StrapInput)(({ theme }) => ({
   border: `1px solid ${theme.palette.blue_6}`,
   backgroundColor: theme.palette.background,
-  borderRadius: 8,
+  borderRadius: 5,
   padding: "1rem",
   fontSize: 13,
   fontWeight: 400,
