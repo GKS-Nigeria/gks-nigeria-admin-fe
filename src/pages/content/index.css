@@ -1,0 +1,16 @@
+.box {
+  width: 130px;
+  height: 130px;
+  border-radius: 10px;
+  background-color: #1C243A;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 1px 14px rgba(0, 0, 0, 0.25);
+  transition: 0.4s ease;
+  cursor: pointer;
+}
+
+.box:hover{
+    transform: scale(1.1);
+}
