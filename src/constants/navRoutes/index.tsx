@@ -3,7 +3,7 @@
 import {
   Routes,
   Route,
-  Outlet,
+  // Outlet,
   Link,
   useMatch,
   useResolvedPath,
@@ -11,8 +11,7 @@ import {
 import type { LinkProps } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { LinkText } from "../../lib/Text";
-import Admin from "../../assets/icons/juniorAdmin.svg";
-import AdminActive from "../../assets/icons/juniorAdmin-active.svg";
+
 
 function CustomLink({ children, to, ...props }: LinkProps) {
   const resolved = useResolvedPath(to);
@@ -49,13 +48,20 @@ function CustomLink({ children, to, ...props }: LinkProps) {
 function Layout() {
   return (
     <div>
-      <nav>
-        <ul css={{ listStyle: "none" }}>
+      <nav className="mx-2">
+            <CustomLink to="/junior_admin">
+              
+              Junior Admins
+            </CustomLink>
+      <CustomLink to="/branch">Branches</CustomLink>
+      <CustomLink to="/members">Members</CustomLink>
+      <CustomLink to="/content">Content</CustomLink>
+        {/* <ul css={{ listStyle: "none" }}>
           <li>
             <CustomLink to="/junior_admin">
-              {/* <img src={AdminActive} alt=""
+              <img src={AdminActive} alt=""
                         css={{ paddingRight: "10px" }}
-                      /> */}
+                      />
               Junior Admins
             </CustomLink>
           </li>
@@ -68,10 +74,10 @@ function Layout() {
           <li>
             <CustomLink to="/content">Content</CustomLink>
           </li>
-        </ul>
+        </ul> */}
       </nav>
 
-      <Outlet />
+      {/* <Outlet /> */}
     </div>
   );
 }

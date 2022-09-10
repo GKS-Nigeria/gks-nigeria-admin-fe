@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/prop-types */
 /** @jsxImportSource @emotion/react */
 
 import { useTheme } from "@emotion/react";
@@ -9,6 +11,8 @@ import {
   Table,
   UncontrolledDropdown,
 } from "reactstrap";
+import { Routes, Route, useParams, Link } from "react-router-dom";
+
 import Option from "../../../assets/icons/ellipsisHorizontal.svg";
 import View from "../../../assets/icons/view.svg";
 import Delete from "../../../assets/icons/delete.svg";
@@ -48,7 +52,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
 
   return (
     <>
-      <Table striped hover>
+      <Table striped borderless hover>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -60,7 +64,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                   <Text
                     color="blue_6"
                     className="fs-12 text-capitalize"
-                    css={{ fontWeight: 700 }}
+                    css={{ fontWeight: 700, padding: "0px 20px" }}
                   >
                     {header}
                   </Text>
@@ -88,11 +92,8 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                     <td key={`${field}-${user._id}`} className="py-3">
                       <Text
                         color="blue_6"
-                        className={`fs-14 ${
-                          field === user.address
-                            ? "text-lowercase"
-                            : "text-capitalize"
-                        }`}
+                        className="fs-14"
+                        css={{padding: "0px 20px"}}
                       >
                         {field ? field : "-"}
                       </Text>
@@ -112,7 +113,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22 }}
+                        css={{ color: palette.black, fontSize: 22, paddingRight: "20px" }}
                       />
                     </DropdownToggle>
                     <DropdownMenu
@@ -126,7 +127,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                     >
                       <DropdownItem css={{ backgroundColor: "transparent" }}>
                         <LinkText
-                          href=""
+                          href="/members/id"
                           color="blue_6"
                           className="fs-14 fw-500"
                         >
@@ -156,6 +157,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
           })}
         </tbody>
       </Table>
+      
     </>
   );
 };

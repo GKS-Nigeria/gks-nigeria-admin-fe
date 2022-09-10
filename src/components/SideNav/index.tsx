@@ -3,6 +3,7 @@
 // import { useTheme } from "@emotion/react";
 import { LinkText, Text } from "../../lib/Text";
 import NavRoutes from "../../constants/navRoutes/index";
+// import { Navbar } from "../../constants/navLink";
 
 const SideNav = () => {
   //   const { palette } = useTheme();
@@ -13,6 +14,7 @@ const SideNav = () => {
       <div>
         <div css={{ margin: "3rem auto 20rem" }}>
           <NavRoutes />
+          {/* <Navbar /> */}
         </div>
 
         <LinkText

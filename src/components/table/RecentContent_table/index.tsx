@@ -85,7 +85,7 @@ const RecentContentTable: React.FC<RecentContentTableProps> = ({ data }) => {
 
   return (
     <>
-      <Table striped hover>
+      <Table striped borderless hover>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {

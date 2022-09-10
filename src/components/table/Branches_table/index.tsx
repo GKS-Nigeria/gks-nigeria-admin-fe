@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/prop-types */
 /** @jsxImportSource @emotion/react */
 
 import { useTheme } from "@emotion/react";
@@ -86,7 +88,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
 
   return (
     <>
-      <Table striped hover>
+      <Table striped borderless hover>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -98,7 +100,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                   <Text
                     color="blue_6"
                     className="fs-12 text-capitalize"
-                    css={{ fontWeight: 700 }}
+                    css={{ fontWeight: 700, padding: "0px 20px" }}
                   >
                     {header}
                   </Text>
@@ -108,7 +110,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
           </tr>
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
-        <tbody css={{ backgroundColor: "#F7F9FCC", paddingLeft: "40px" }}>
+        <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
           {data?.map((user: any) => {
             const fields = [
               user._id,
@@ -133,6 +135,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                           css={{
                             backgroundColor: palette.blue_6,
                             borderRadius: 5,
+                            margin: "0px 30px"
                           }}
                         >
                           {field}
@@ -142,7 +145,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                   }
                   return (
                     <td key={`${field}-${user._id}`} className="py-3">
-                      <Text color="blue_6" className="fs-14">
+                      <Text color="blue_6" className="fs-14" css={{padding: "0px 20px"}}>
                         {field ? field : "-"}
                       </Text>
                     </td>
@@ -161,7 +164,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22 }}
+                        css={{ color: palette.black, fontSize: 22, paddingRight: "20px" }}
                       />
                     </DropdownToggle>
                     <DropdownMenu

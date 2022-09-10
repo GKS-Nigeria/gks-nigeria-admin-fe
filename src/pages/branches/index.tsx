@@ -23,11 +23,12 @@ const Branches = () => {
       })
     );
   };
+  
   return (
     <div>
       <AdminDashboardLayout pageTitle="Branches">
         <div className="d-flex justify-content-between">
-          <div css={{marginLeft: 6}}>Number of Branches:</div>
+          <div css={{marginLeft: "20px"}}>Number of Branches: </div>
           {/* <AssignModal /> */}
           <Button
             variant="green"
