@@ -31,7 +31,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <ReduxProvider store={store}>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/junior_admin/*" element={<JuniorAdmin />} />
             <Route path="/branch/*" element={<Branches />} />
             <Route path="/content/*" element={<Content />} />

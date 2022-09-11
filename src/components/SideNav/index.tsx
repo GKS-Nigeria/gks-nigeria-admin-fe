@@ -3,6 +3,7 @@
 // import { useTheme } from "@emotion/react";
 import { LinkText, Text } from "../../lib/Text";
 import NavRoutes from "../../constants/navRoutes/index";
+import { logoutUser } from "../../services/user";
 // import { Navbar } from "../../constants/navLink";
 
 const SideNav = () => {
@@ -21,6 +22,7 @@ const SideNav = () => {
           color="black_2"
           className="d-flex align-items-center justify-content-start btn btn-light w-90 nav-link fs-17 text-capitalize"
           css={{ marginLeft: "1rem" }}
+          href="/"
         >
           <Text color="blue_6">logout</Text>
         </LinkText>
