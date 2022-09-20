@@ -10,6 +10,12 @@ import Branches from "./pages/branches";
 import Content from "./pages/content";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./redux/store";
+import Member from "./pages/members/member";
+import Feed from "./pages/content/feed";
+import Announcement from "./pages/content/announcement";
+import Notification from "./pages/content/notification";
+import Calender from "./pages/content/calender";
+import DailyDevotion from "./pages/content/dailyDevotion";
 
 const { Routes, Route } = require("react-router-dom");
 
@@ -18,18 +24,24 @@ function App() {
     //     <div className="App">
     // <h1 css={{
     //   color: "black"
-    // }}>Trying something out</h1>
+    // }}>Trying something </h1>
     // <Login />
     //     </div>
     <>
       <ThemeProvider theme={theme}>
         <ReduxProvider store={store}>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/junior_admin/*" element={<JuniorAdmin />} />
             <Route path="/branch/*" element={<Branches />} />
             <Route path="/content/*" element={<Content />} />
-            <Route path="/members/*" element={<Members />} />
+            <Route path="/content/feed" element={<Feed />} />
+            <Route path="/content/announcement" element={<Announcement />} />
+            <Route path="/content/notification" element={<Notification />} />
+            <Route path="/content/calender" element={<Calender />} />
+            <Route path="/content/dailyDevotion" element={<DailyDevotion />} />
+            <Route path="members/*" element={<Members />} />
+            <Route path="members/:id" element={<Member />} />
           </Routes>
         </ReduxProvider>
       </ThemeProvider>

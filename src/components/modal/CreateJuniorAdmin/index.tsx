@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-lone-blocks */
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ModalHeader,
   ModalBody,
@@ -14,41 +14,106 @@ import { Input } from "../../../lib/form/Input";
 import { Text } from "../../../lib/Text";
 import { Button } from "../../../lib/Button";
 import { SideModal } from "../../../lib/SideModal";
-import { useTheme } from "@emotion/react";
 import Close from "../../../assets/icons/close.svg";
+import { useFormik } from "formik";
+import {
+  ICreateJuniorAdminOptions,
+  IJuniorAdminApiResponse,
+  IJuniorAdmin,
+} from "../../../services/user/types";
+import { createJuniorAdmin } from "../../../services/user";
+// import { IJuniorAdminApiResponse } from "../../../services/user/types";
+import { juniorAdminSchema } from "../../../services/user/schema";
+import { getAllBranch } from "../../../services/branch";
+import { IBranch } from "../../../services/branch/types";
 
 interface ModalProps {
   showModal: boolean;
   toggle: () => void;
+  onClosed?: () => void;
+  createFunction: (
+    data: ICreateJuniorAdminOptions
+  ) => Promise<IJuniorAdminApiResponse>;
+  onSuccess: () => void;
+  juniorAdmin?: IJuniorAdmin;
 }
 
 const CreateJuniorAdminModal: React.FC<ModalProps> = ({
   showModal,
   toggle,
+  createFunction,
+  onSuccess,
+  juniorAdmin,
 }) => {
-  const [branchName, setBranchName] = useState<any[] | null>(null);
-  const [branhAddress, setBranchAddress] = useState<any[] | null>(null);
-  const [branchNameInput, setBranchNameInput] = useState("");
-  const [branchAddressInput, setBranchAddressInput] = useState("");
-  const { palette } = useTheme();
-
-  const nameInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setBranchNameInput(e.target.value);
-  };
-  const addressInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setBranchAddressInput(e.target.value);
+  const initialValues: ICreateJuniorAdminOptions = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    branch: "",
   };
 
+  const {
+    handleSubmit,
+    getFieldProps,
+    setFieldValue,
+    isValid,
+    isSubmitting,
+    touched,
+    errors,
+    resetForm,
+  } = useFormik({
+    initialValues,
+    validationSchema: juniorAdminSchema,
+    onSubmit(values, { setSubmitting }) {
+      createFunction(values)
+        .then(() => {
+          console.log("submittinggg");
+          onSuccess();
+          toggle();
+          resetForm();
+        })
+        .finally(() => setSubmitting(false));
+    },
+  });
+  const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
+  const [branchName, setBranchName] = useState(["isolo", "ajah"]);
 
+  useEffect(() => {
+    getAllBranch().then((res) => {
+      setBranchApiResponse(res.data.results);
+    });
+  }, []);
 
-  const labels = ["first name", "last name", "email", "phone number"];
+  const branchApiResponseData = branchApiResponse;
+  const branchData = branchApiResponseData.map((item) => {
+    return item.branch.name;
+  });
+  // const branchData = branchApiResponseData.map((item) => {
+  //   return item.branch.name
+  // })
+  // setBranchName(  item.branch.name )
+  // branchApiResponseData.map((item, idx) => {
+  //     setBranchName(  item.branch.name ) })
+  // setBranchName( branchData )
+
+  console.log(branchData);
+  useEffect(() => {
+    if (!juniorAdmin) {
+      resetForm();
+      return;
+    }
+    setFieldValue("firtName", juniorAdmin.firstName, true);
+    setFieldValue("lastName", juniorAdmin.lastName, true);
+    setFieldValue("email", juniorAdmin.email, true);
+    setFieldValue("phone", juniorAdmin.phone, true);
+    setFieldValue("branch", juniorAdmin.branch, true);
+  }, [resetForm, setFieldValue, juniorAdmin]);
+
+  const labels = ["first name", "last name", "email", "phone number", "branch"];
 
   return (
-    <SideModal
-      isOpen={showModal}
-      fullscreen
-      toggle={toggle}
-    >
+    <SideModal isOpen={showModal} fullscreen toggle={toggle}>
       <ModalHeader className="border-0 ">
         <div className="d-flex">
           <Text color="blue_6" className="fs-22 pb-4 fw-bold text-capitalize">
@@ -59,47 +124,83 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
           </div>
         </div>
       </ModalHeader>
-      <ModalBody>
-        <FormGroup className="mb-3">
-          {labels.map((label, idx) => {
-            return (
-              <div key={idx}>
-                <Label>
+
+      <form onSubmit={handleSubmit}>
+        <ModalBody>
+          <FormGroup className="mb-3">
+            {labels.map((label, idx) => {
+              const fieldName = Object.keys(initialValues)[idx];
+
+              return (
+                <div key={idx} className="mb-3">
                   <Text
-                    color="blue_6"
+                    color="black"
                     className="fs-13 fw-bold text-capitalize mb-1"
                   >
                     {label}
+                    <Text color="red" as="sup">
+                      *
+                    </Text>
                   </Text>
-                </Label>
-                <Input
-                  id="juniorAdmin"
-                  type="text"
-                  // value={branchNameInput}
-                  // onChange={nameInput}
-                  placeholder={label}
-                  className="mb-3"
-                />
-              </div>
-            );
-          })}
-          <Label for="branchName">
+
+                  <Input
+                    key={idx}
+                    type={
+                      label === "phone number"
+                        ? "tel"
+                        : label === "email address"
+                        ? "email"
+                        : label === "branch"
+                        ? "select"
+                        : "text"
+                    }
+                    placeholder={label}
+                    {...getFieldProps(fieldName)}
+                  >
+                    <option value="">-select-</option>
+                    <option value={"63230ffc49be6c899ca0e8e2"}>Lekki</option>
+                    
+                    {branchName.map((field, idx) => {
+                      return (
+                        <option key={idx} value={field}>
+                          {field}
+                        </option>
+                      );
+                    })}
+                  </Input>
+
+                  {touched[fieldName] && errors[fieldName] ? (
+                    <Text color="red" className="fs-13 m-0">
+                      {errors[fieldName]}
+                    </Text>
+                  ) : null}
+                </div>
+              );
+            })}
+            {/* <Label for="branchName">
             <Text color="blue_6" className="fs-13 fw-bold text-capitalize mb-1">
               assign to branch
             </Text>
           </Label>
-          <Input id="branchName" type="select" placeholder="Junior admin" />
-        </FormGroup>
-        <Button
-          variant="green"
-          css={{ width: "100%", marginTop: "50px" }}
-          className="fw-bold"
-          onClick={toggle}
-        >
-          Create
-        </Button>
-      </ModalBody>
-      \
+          <Input id="branchName" type="select" placeholder="Branch" >
+          <option value=""></option>
+          <option value={"63230ffc49be6c899ca0e8e2"}>Lekki</option>
+          </Input> */}
+          </FormGroup>
+
+          <Button
+            variant="green"
+            type="submit"
+            css={{ width: "100%", marginTop: "50px" }}
+            className="fw-bold"
+            disabled={!isValid || isSubmitting}
+          >
+            {isSubmitting ? "submiting" : "Create"}
+          </Button>
+        </ModalBody>
+      </form>
+      {/* )}
+      </Formik> */}
     </SideModal>
   );
 };

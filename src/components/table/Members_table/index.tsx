@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/prop-types */
 /** @jsxImportSource @emotion/react */
 
 import { useTheme } from "@emotion/react";
@@ -9,9 +11,14 @@ import {
   Table,
   UncontrolledDropdown,
 } from "reactstrap";
+import { useState, useEffect } from "react";
+// import { Routes, Route, useParams, Link } from "react-router-dom";
+
 import Option from "../../../assets/icons/ellipsisHorizontal.svg";
 import View from "../../../assets/icons/view.svg";
 import Delete from "../../../assets/icons/delete.svg";
+import { IMember } from "../../../services/user/types";
+import { getAllMembers } from "../../../services/user";
 
 interface MembersTableProps {
   data?: any[];
@@ -20,35 +27,23 @@ interface MembersTableProps {
 const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
   const { palette } = useTheme();
 
-  data = [
-    {
-      _id: "1",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "chior",
-    },
-    {
-      _id: "2",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "",
-    },
-    {
-      _id: "3",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "chior",
-    },
-  ];
+  const [memberApiResponse, setMemberApiResponse] = useState<IMember[]>([]);
+
+  useEffect(() => {
+    getAllMembers().then((res) => {
+      setMemberApiResponse(res.data.results);
+    });
+  }, []);
+ 
+  const memberValues = memberApiResponse.map((members) => {
+    return members;
+  });
 
   const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
 
   return (
     <>
-      <Table striped hover>
+      <Table striped borderless>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -60,7 +55,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                   <Text
                     color="blue_6"
                     className="fs-12 text-capitalize"
-                    css={{ fontWeight: 700 }}
+                    css={{ fontWeight: 700, padding: "0px 20px" }}
                   >
                     {header}
                   </Text>
@@ -71,10 +66,10 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {data?.map((user: any) => {
+          {memberValues?.map((user: any) => {
             const fields = [
               user._id,
-              user.name,
+              [user.firstName," ", user.lastName],
               user.branch,
               user.address,
               user.group,
@@ -88,11 +83,8 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                     <td key={`${field}-${user._id}`} className="py-3">
                       <Text
                         color="blue_6"
-                        className={`fs-14 ${
-                          field === user.address
-                            ? "text-lowercase"
-                            : "text-capitalize"
-                        }`}
+                        className="fs-14"
+                        css={{padding: "0px 20px"}}
                       >
                         {field ? field : "-"}
                       </Text>
@@ -112,7 +104,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22 }}
+                        css={{ color: palette.black, fontSize: 22, paddingRight: "20px" }}
                       />
                     </DropdownToggle>
                     <DropdownMenu
@@ -126,7 +118,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                     >
                       <DropdownItem css={{ backgroundColor: "transparent" }}>
                         <LinkText
-                          href=""
+                          href="/members/id"
                           color="blue_6"
                           className="fs-14 fw-500"
                         >
@@ -156,6 +148,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
           })}
         </tbody>
       </Table>
+      
     </>
   );
 };
