@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AdminDashboardLayout from "../../../layout/AdminDashboardLayout";
 import { Text } from "../../../lib/Text";
 import Back from "../../../assets/icons/back.svg";
-import { Button } from "../../../lib/Button";
 import ContentCalender from "../../../components/contents/Calender";
 
 const Calender = () => {
@@ -24,13 +23,8 @@ const Calender = () => {
             </Text>
           </div>
           <section>
-              <ContentCalender />
+            <ContentCalender />
           </section>
-          <div className="d-flex justify-content-between mt-4">
-              <div></div>
-              <Button variant="green">Publish</Button>
-          </div>
-          
         </div>
       </AdminDashboardLayout>
     </div>

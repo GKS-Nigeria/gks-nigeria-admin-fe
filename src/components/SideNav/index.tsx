@@ -7,8 +7,6 @@ import { logoutUser } from "../../services/user";
 // import { Navbar } from "../../constants/navLink";
 
 const SideNav = () => {
-  //   const { palette } = useTheme();
-  //   const router = useRoutes();
 
   return (
     <nav css={{ maxWidth: "286px" }}>
@@ -22,6 +20,7 @@ const SideNav = () => {
           color="black_2"
           className="d-flex align-items-center justify-content-start btn btn-light w-90 nav-link fs-17 text-capitalize"
           css={{ marginLeft: "1rem" }}
+          onClick={logoutUser}
           href="/"
         >
           <Text color="blue_6">logout</Text>

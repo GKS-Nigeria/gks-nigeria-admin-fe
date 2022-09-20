@@ -7,8 +7,9 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
     custom?: {
       skipToast: boolean;
     };
+    config?: any
   }
-
+   
 const axios = _axios.create({
     baseURL: `${API_BASE_URL}/`,
     headers: {
@@ -16,6 +17,16 @@ const axios = _axios.create({
     },
   });
 
+  axios.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("token");
+      if (token && config.headers) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
   const handleApiSuccess = (res: AxiosResponse) => {
     return res.data;
@@ -63,7 +74,6 @@ export const Api = {
           .post(endpoint, data, config)
           .then(handleApiSuccess)
           .catch(handleApiError),
-      
     put: (
       endpoint: string,
       data: any,

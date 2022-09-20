@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AdminDashboardLayout from "../../../layout/AdminDashboardLayout";
 import { Text } from "../../../lib/Text";
 import Back from "../../../assets/icons/back.svg";
-import { Button } from "../../../lib/Button";
 import ContentDailyDevotion from "../../../components/contents/DailyDevotion";
 
 const DailyDevotion = () => {
@@ -23,13 +22,9 @@ const DailyDevotion = () => {
               <img src={Back} /> Back
             </Text>
           </div>
- <section>
-   <ContentDailyDevotion />
- </section>
-          <div className="d-flex justify-content-between mt-4">
-              <div></div>
-              <Button variant="green">Publish</Button>
-          </div>
+          <section>
+            <ContentDailyDevotion />
+          </section>
         </div>
       </AdminDashboardLayout>
     </div>

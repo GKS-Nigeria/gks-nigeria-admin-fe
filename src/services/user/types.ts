@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, IApiResponse } from "../../helpers/api/types";
 
 
@@ -20,37 +21,56 @@ export interface IUserLoginResponse {
   statusCode?: number;
   message?: string;
   success: boolean;
+  data: any;
+  jwt: string;
   access_code?: string;
 }
 
-export interface ICreateUserOptions {
-  first_name: string;
-  last_name: string;
+export interface ICreateJuniorAdminOptions {
+  [key: string]: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone_number: string;
+  phone: string;
+  branch: string
 
 }
 
-export interface IUser extends Document {
+export interface IJuniorAdmin extends Document {
+  firstName: string;
+  lastName: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  roles: USER_ROLES[];
+  phone: string;
+  branch: string
+  isActive: boolean;
+}
+
+export interface IMember extends Document {
+  email: string;
+  firstName: string;
+  lastName: string;
   branch: string;
+  results: string;
   address: string;
-  phone_number: string;
+  phone: string;
 }
 
-export interface IUserApiResponse extends IApiResponse {
-  data: IUser;
+export interface IMemberApiResponse extends IApiResponse {
+  data: IMember;
+}
+export interface IMembersApiResponse extends IApiResponse {
+  data: IMember[] | any;
 }
 
-export interface IUsersApiResponse extends IApiResponse {
-  data: IUser[];
+export interface IJuniorAdminApiResponse extends IApiResponse {
+  data: IJuniorAdmin;
+}
+
+export interface IJuniorAdminsApiResponse extends IApiResponse {
+  data: IJuniorAdmin[];
 }
 
 export interface ILoginUserOptions {
   email: string;
   code: string;
-  // entity?: USER_ENTITY;
 }

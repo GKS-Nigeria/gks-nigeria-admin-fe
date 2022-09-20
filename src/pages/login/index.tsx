@@ -11,8 +11,7 @@ import {
   requestTokenSchema,
 } from "../../services/user/schema";
 import { loginUser, requestToken } from "../../services/user";
-import {  useNavigate } from "react-router-dom";
-// import { USER_ENTITY } from "../../services/user/types";
+import { useNavigate } from "react-router-dom";
 
 interface IInputFields {
   email: string;
@@ -81,8 +80,10 @@ const Login = () => {
                 loginUser(values)
                   .then((res) => {
                     if (res.success === true) {
-                      navigate("/junior_admin")
+                      navigate("/junior_admin");
                     }
+                    const jwtToken = res.data.jwt;
+                    localStorage.setItem("token", jwtToken);
                   })
                   .finally(() => setIsSubmitting(false));
               }}
@@ -130,42 +131,6 @@ const Login = () => {
                     </div>
                   )}
 
-                  {/* {!check && 
-                     <div className="pt-2">
-                      <Text as="label" className="fs-13 fw-bold py-2" color="black">
-                        Email address{" "}
-                        <Text as="sup" color="red">
-                          *
-                        </Text>
-                      </Text>
-                      <Input
-                        type="email"
-                        placeholder="johnboyega@gmail.com"
-                       
-                      />
-                     
-                    </div> } */}
-
-                  {/* { check && (<div className="py-2">
-                      <Text as="label" className="fs-13 fw-bold py-2" color="blue_6">
-                        Passcode
-                        <Text as="sup" color="red">
-                          *
-                        </Text>
-                      </Text>
-                      <Input  type="password" />
-                     
-                    </div>)} */}
-
-                  {/* <Button
-                    variant="green"
-                    type="submit"
-                    className="my-4 text-capitalize w-100"
-                   
-                  >
-                      Verify email
-                   
-                  </Button> */}
                   <Button
                     variant="green"
                     type="submit"
@@ -200,12 +165,10 @@ const Login = () => {
           className="d-flex justify-content-center align-items-center"
           css={{ backgroundColor: palette.green, width: "50%" }}
         >
-          {/* <h1>Righttt</h1> */}
           <img src={LoginLogo} alt="" width="200px" />
         </div>
       </div>
     </>
   );
 };
-
 export default Login;

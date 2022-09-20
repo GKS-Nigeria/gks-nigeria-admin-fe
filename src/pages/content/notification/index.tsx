@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import AdminDashboardLayout from "../../../layout/AdminDashboardLayout";
 import { Text } from "../../../lib/Text";
 import Back from "../../../assets/icons/back.svg";
-import { Button } from "../../../lib/Button";
 import ContentNotification from "../../../components/contents/Notification";
 
 const Notification = () => {
@@ -11,7 +10,7 @@ const Notification = () => {
 
   return (
     <div>
-      <AdminDashboardLayout pageTitle="Feed">
+      <AdminDashboardLayout pageTitle="Notification">
         <div className="p-4">
           <div css={{ marginBottom: "10px" }}>
             <Text
@@ -23,13 +22,9 @@ const Notification = () => {
               <img src={Back} /> Back
             </Text>
           </div>
-        <section>
+          <section>
             <ContentNotification />
-        </section>
-          <div className="d-flex justify-content-between mt-4">
-              <div></div>
-              <Button variant="green">Send</Button>
-          </div>
+          </section>
         </div>
       </AdminDashboardLayout>
     </div>

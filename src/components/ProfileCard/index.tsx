@@ -17,14 +17,17 @@ import Profile from "../../assets/icons/profile.svg";
 import Ellipsis from "../../assets/icons/ellipsisVertical.svg";
 import Delete from "../../assets/icons/delete.svg";
 import Edit from "../../assets/icons/edit.svg";
+// import { getAllJuniorAdmins } from "../../services/user"
+import { IJuniorAdmin } from "../../services/user/types"
 
 interface ProfileCardProps {
-  data?: any[];
+  data?: IJuniorAdmin[];
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
   const { palette } = useTheme();
-  data = [
+
+  const dummyData = [
     {
       _id: "1",
       branch: "Ojota",
@@ -56,38 +59,38 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
       name: "Joseph Olaitan",
     },
     {
-      _id: "5",
+      _id: "6",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
     },
     {
-      _id: "5",
+      _id: "7",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
     },
 
     {
-      _id: "5",
+      _id: "8",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
     },
     {
-      _id: "5",
+      _id: "53",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
     },
     {
-      _id: "5",
+      _id: "52",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
     },
     {
-      _id: "5",
+      _id: "15",
       branch: "Lekki",
       group: "choir",
       name: "Joseph Olaitan",
@@ -95,7 +98,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
   ];
   return (
     <div className="d-flex flex-wrap ">
-      {data?.map((user) => {
+      {data?.map((user: IJuniorAdmin, ) => {
         return (
           <Card
             key={user._id}
@@ -188,9 +191,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
               }}
             >
               {/* <CardTitle tag="h5">John Boyega</CardTitle> */}
-              <Text color="white">{user.name}</Text>
+              <Text color="white">{user.firstName}</Text>
               <CardSubtitle className="mb-3 text-muted" tag="h6">
-                {user.group}
+                {/* {user.group} */}
               </CardSubtitle>
               <Text color="white" className="fs-14">
                 <img src={Location} alt="" css={{ paddingRight: "8px" }} />

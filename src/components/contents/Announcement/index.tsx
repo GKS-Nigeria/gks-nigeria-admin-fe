@@ -13,24 +13,21 @@ import { useFormik } from "formik";
 import { contentSchema } from "../../../services/content/schema";
 import {
   IPost,
-  IPostCalenderActivityOptions,
+  IPostContentApiResponse,
+  IPostContentOptions,
 } from "../../../services/content/types";
-import { postCalenderActivity } from "../../../services/content";
+import { postAnnouncement } from "../../../services/content";
 import { Button } from "../../../lib/Button";
 
 interface PostProps {
   postContent?: IPost;
 }
 
-const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
-  const initialValues: IPostCalenderActivityOptions = {
+const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
+  const initialValues: IPostContentOptions = {
     title: "",
     body: "",
     branchId: "",
-    group: "",
-    date: "",
-    startTime: "",
-    endTime: "",
   };
 
   const {
@@ -46,7 +43,7 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
     initialValues,
     validationSchema: contentSchema,
     onSubmit(values, { setSubmitting }) {
-      postCalenderActivity(values)
+      postAnnouncement(values)
         .then(() => {
           resetForm();
         })
@@ -62,10 +59,6 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
     setFieldValue("title", postContent.title, true);
     setFieldValue("body", postContent.body, true);
     setFieldValue("branchId", postContent.branchId, true);
-    setFieldValue("group", postContent.group, true);
-    setFieldValue("date", postContent.date, true);
-    setFieldValue("startTime", postContent.startTime, true);
-    setFieldValue("endTime", postContent.endTime, true);
   }, [resetForm, setFieldValue, postContent]);
 
   const labels = ["title", "body", "branch/groups"];
@@ -73,61 +66,63 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
   const { palette } = useTheme();
   return (
     <>
-    <div>
-      <form onSubmit={handleSubmit}>
-      <div
-        css={{
-          backgroundColor: palette.white,
-          padding: "40px",
-          boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
-          borderRadius: "4px",
-        }}
-      >
-        <Label for="feed">
-          <Text color="blue_6" className="fs-13 fw-bold text-capitalize ">
-            media
-          </Text>
-        </Label>
-        <div
-          css={{
-            border: `1px dashed ${palette.blue_6}`,
-            borderRadius: "8px",
-            backgroundColor: "transparent",
-          }}
-        >
-          <label
-            htmlFor="media_upload"
-            className="d-flex justify-content-center flex-column align-items-center"
+      <div>
+        <form onSubmit={handleSubmit}>
+          <div
             css={{
-              padding: "30px 0",
-              cursor: "pointer",
+              backgroundColor: palette.white,
+              padding: "40px",
+              boxShadow: "0px 1px 10px rgba(0, 0, 0, 0.15)",
+              borderRadius: "4px",
             }}
           >
-            <Text color="blue_6" className="fs-13 fw-bold text-capitalize my-2">
-              Upload media content
-            </Text>
-            <div className="d-flex">
-              <div className="m-2">
-                <img src={Image} alt="" />
-              </div>
-              <div className="m-2">
-                <img src={Video} alt="" />
-              </div>
-              <div className="m-2">
-                <img src={Audio} alt="" />
-              </div>
+            <Label for="feed">
+              <Text color="blue_6" className="fs-13 fw-bold text-capitalize ">
+                media
+              </Text>
+            </Label>
+            <div
+              css={{
+                border: `1px dashed ${palette.blue_6}`,
+                borderRadius: "8px",
+                backgroundColor: "transparent",
+              }}
+            >
+              <label
+                htmlFor="media_upload"
+                className="d-flex justify-content-center flex-column align-items-center"
+                css={{
+                  padding: "30px 0",
+                  cursor: "pointer",
+                }}
+              >
+                <Text
+                  color="blue_6"
+                  className="fs-13 fw-bold text-capitalize my-2"
+                >
+                  Upload media content
+                </Text>
+                <div className="d-flex">
+                  <div className="m-2">
+                    <img src={Image} alt="" />
+                  </div>
+                  <div className="m-2">
+                    <img src={Video} alt="" />
+                  </div>
+                  <div className="m-2">
+                    <img src={Audio} alt="" />
+                  </div>
+                </div>
+              </label>
+              <input
+                type="file"
+                name="media_upload"
+                id="media_uploaad"
+                max={1}
+                className="d-none"
+              />
             </div>
-          </label>
-          <input
-            type="file"
-            name="media_upload"
-            id="media_uploaad"
-            max={1}
-            className="d-none"
-          />
-        </div>
-
-        {labels.map((label, idx) => {
+            {labels.map((label, idx) => {
               const fieldName = Object.keys(initialValues)[idx];
               if (fieldName === "title" || fieldName === "body") {
                 return (
@@ -171,7 +166,6 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
                     >
                       <option value="">-select-</option>
                       <option value="all">All</option>
-                      <option value="62ddb886fb125e6e7b873bea">Test branch</option>
                     </Input>
 
                     {touched[fieldName] && errors[fieldName] ? (
@@ -183,45 +177,8 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
                 );
               }
             })}
-      
-        <div className="d-flex my-4 justify-content-between">
-            <div>
-            <Text color="blue_6" className="fs-13 fw-bold text-capitalize">
-            select a day
-          </Text>
-              <Input
-          id="feed"
-          type="date"
-          css={{ width: "408px" }}
-          {...getFieldProps("date")}
-        />  
-            </div>
-        
-         <div>
-         <Text color="blue_6" className="fs-13 fw-bold text-capitalize">
-            start
-          </Text>
-         <Input
-          id="startTime"
-          type="time"
-          css={{ width: "225px",  }}
-          {...getFieldProps("startTime")}
-        />
-         </div>
-         <div>
-         <Text color="blue_6" className="fs-13 fw-bold text-capitalize">
-            end
-          </Text>
-         <Input
-          id="endTime"
-          type="time"
-          css={{ width: "225px" }}
-          {...getFieldProps("endTime")}
-        />
-         </div>
-        </div>
-      </div>
-      <div className="d-flex justify-content-between mt-4">
+          </div>
+          <div className="d-flex justify-content-between mt-4">
             <div></div>
             <Button
               variant="green"
@@ -233,11 +190,10 @@ const ContentCalender: React.FC<PostProps> = ({ postContent })=> {
               {isSubmitting ? "submiting" : "Publish"}
             </Button>
           </div>
-      </form>
-    </div>
-      
+        </form>
+      </div>
     </>
   );
 };
 
-export default ContentCalender;
+export default PostAnnouncement;

@@ -11,11 +11,14 @@ import {
   Table,
   UncontrolledDropdown,
 } from "reactstrap";
-import { Routes, Route, useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+// import { Routes, Route, useParams, Link } from "react-router-dom";
 
 import Option from "../../../assets/icons/ellipsisHorizontal.svg";
 import View from "../../../assets/icons/view.svg";
 import Delete from "../../../assets/icons/delete.svg";
+import { IMember } from "../../../services/user/types";
+import { getAllMembers } from "../../../services/user";
 
 interface MembersTableProps {
   data?: any[];
@@ -24,35 +27,23 @@ interface MembersTableProps {
 const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
   const { palette } = useTheme();
 
-  data = [
-    {
-      _id: "1",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "chior",
-    },
-    {
-      _id: "2",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "",
-    },
-    {
-      _id: "3",
-      name: "Emmanuel Johnson",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      group: "chior",
-    },
-  ];
+  const [memberApiResponse, setMemberApiResponse] = useState<IMember[]>([]);
+
+  useEffect(() => {
+    getAllMembers().then((res) => {
+      setMemberApiResponse(res.data.results);
+    });
+  }, []);
+ 
+  const memberValues = memberApiResponse.map((members) => {
+    return members;
+  });
 
   const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
 
   return (
     <>
-      <Table striped borderless hover>
+      <Table striped borderless>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -75,10 +66,10 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {data?.map((user: any) => {
+          {memberValues?.map((user: any) => {
             const fields = [
               user._id,
-              user.name,
+              [user.firstName," ", user.lastName],
               user.branch,
               user.address,
               user.group,

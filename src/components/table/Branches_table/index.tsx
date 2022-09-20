@@ -20,18 +20,26 @@ import AssignModal from "../../modal/AssignJuniorAdmin";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { toggleModal } from "../../../redux/slices/ui";
 import { Modals } from "../../../redux/slices/ui/types";
+import { IBranch } from "../../../services/branch/types";
+import { useState, useEffect } from "react";
+import { getAllBranch } from "../../../services/branch";
 
-interface BranchesTableProps {
-  data?: any[];
-}
-
-const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
+const BranchesTable = () => {
   const { palette } = useTheme();
   const {
     ui: { modals },
   } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
+
+  const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
+  // const [numberOfBranches, setNumberOfBranches] = useState("");
+
+  useEffect(() => {
+    getAllBranch().then((res) => {
+      setBranchApiResponse(res.data.results);
+    });
+  }, []);
 
   const showAssignModal = () => {
     dispatch(
@@ -40,41 +48,15 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
       })
     );
   };
+  const numOfGroups = branchApiResponse.map((items, idx) => {
+    return Object.values(items.groups)[idx];
+  });
 
-  data = [
-    {
-      _id: "1",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      groups: "6",
-      members: "34",
-      junior_admin: "Joseph Olaitan",
-    },
-    {
-      _id: "2",
-      branch: "Lekki",
-      address: "28, Mobolaji Johnson",
-      groups: "13",
-      members: "231",
-      junior_admin: "Victoria John",
-    },
-    {
-      _id: "3",
-      branch: "Lekki",
-      address: "28, Mobolaji Johnson",
-      groups: "13",
-      members: "231",
-      junior_admin: "Victoria Adams",
-    },
-    {
-      _id: "4",
-      branch: "Isolo",
-      address: "28, Mobolaji Johnson",
-      groups: "24",
-      members: "331",
-      junior_admin: "",
-    },
-  ];
+  console.log(numOfGroups);
+
+  const branchValues = branchApiResponse.map((results) => {
+    return results.branch;
+  });
 
   const tableHeaders = [
     "#",
@@ -88,7 +70,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
 
   return (
     <>
-      <Table striped borderless hover>
+      <Table striped borderless>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -111,23 +93,28 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {data?.map((user: any) => {
+          {branchValues?.map((branch: any) => {
             const fields = [
-              user._id,
-              user.branch,
-              user.address,
-              user.groups,
-              user.members,
-              user.junior_admin,
-              // user.option,
+              branch._id,
+              branch.name,
+              branch.address,
+              // branch.groups ,
+              // numOfGroups ||
+              "2",
+              branch.members.length,
+              branch.admins || "-",
+              // branch.option,
             ];
 
             return (
-              <tr key={`${user._id}`}>
+              <tr key={`${branch._id}`}>
                 {fields.map((field) => {
-                  if (field === user.groups) {
+                  if (field === numOfGroups) {
                     return (
-                      <td key={`${field}-${user._id}`} className="align-middle">
+                      <td
+                        key={`${field}-${branch._id}`}
+                        className="align-middle"
+                      >
                         <Text
                           as="span"
                           color="white"
@@ -135,7 +122,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                           css={{
                             backgroundColor: palette.blue_6,
                             borderRadius: 5,
-                            margin: "0px 30px"
+                            margin: "0px 30px",
                           }}
                         >
                           {field}
@@ -144,8 +131,12 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                     );
                   }
                   return (
-                    <td key={`${field}-${user._id}`} className="py-3">
-                      <Text color="blue_6" className="fs-14" css={{padding: "0px 20px"}}>
+                    <td key={`${field}-${branch._id}`} className="py-3">
+                      <Text
+                        color="blue_6"
+                        className="fs-14"
+                        css={{ padding: "0px 20px" }}
+                      >
                         {field ? field : "-"}
                       </Text>
                     </td>
@@ -164,7 +155,11 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22, paddingRight: "20px" }}
+                        css={{
+                          color: palette.black,
+                          fontSize: 22,
+                          paddingRight: "20px",
+                        }}
                       />
                     </DropdownToggle>
                     <DropdownMenu

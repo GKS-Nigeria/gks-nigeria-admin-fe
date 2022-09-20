@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { USER_CODE_KEY } from "../../constants/index";
 import { Api } from "../../helpers/api";
 import {
-  ICreateUserOptions,
+  ICreateJuniorAdminOptions,
+  IJuniorAdminApiResponse,
+  IJuniorAdminsApiResponse,
   ILoginUserOptions,
-  IUserApiResponse,
+  // IUserApiResponse,
+  IMembersApiResponse,
   IUserLoginResponse,
   IUserTokenApiResponse,
   
 } from "./types";
-
-const AUTH_API_BASE = "/auth";
 
 
 export const loadAuthToken = () => {
@@ -28,7 +30,7 @@ export const requestToken = async (
   
 ) => {
   const res: IUserTokenApiResponse = await Api.post(
-    `${AUTH_API_BASE}/request`,
+    "auth/request",
     { email}
   );
   return res;
@@ -36,28 +38,35 @@ export const requestToken = async (
 
 export const logoutUser = () => {
   // removeAuthToken();
+
   console.log("logout")
 
 };
 
 export const loginUser = async (data: ILoginUserOptions) => {
   const res = (await Api.post(
-    `${AUTH_API_BASE}/verify`,
+    "auth/verify",
     data
   )) as IUserLoginResponse;
   res.access_code && saveAuthToken(res.access_code);
   return res;
 };
 
-export const createUser = async (data: ICreateUserOptions) => {
-  const res: IUserApiResponse = await Api.post("admin/create-junior-admin", data);
+
+export const createJuniorAdmin = async (data: ICreateJuniorAdminOptions) => {
+  const res: IJuniorAdminApiResponse = await Api.post("admin/create-junior-admin", data);
   return res;
 };
 
-// export const getAllUsers = async (params?: any) => {
-//   const res: IUsersApiResponse = await Api.get("admin/get-junior-admin", { params });
-//   return res;
-// };
+export const getAllJuniorAdmins = async (params?: any) => {
+  const res: IJuniorAdminsApiResponse = await Api.get("admin/junior-admins", { params });
+  return res;
+};
+
+export const getAllMembers = async (params?: any) => {
+  const res: IMembersApiResponse = await Api.get("admin/get-users", { params });
+  return res;
+};
 
 // export const getSingleUser = async (id: IUser["_id"]) => {
 //   const res: IUserApiResponse = await Api.get(`/junior-admin/${id}`);

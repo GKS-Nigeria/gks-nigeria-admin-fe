@@ -2,6 +2,12 @@
 export interface IApiResponse {
     data: any;
     success: true;
+    jwt: string;
+    message: string;
+    results: string;
+    branch: string | any;
+    admins: string;
+    access_code: string;
 }
 
 export interface IApiSuccessResponse extends IApiResponse {
@@ -15,7 +21,8 @@ export interface IApiErrorResponse {
 
 export interface Document {
     _id: string;
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
+    results: string;
     __V: number;
 }

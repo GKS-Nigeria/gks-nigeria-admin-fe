@@ -8,8 +8,15 @@ import { toggleModal } from "../../redux/slices/ui";
 import { Modals } from "../../redux/slices/ui/types";
 import CreateJuniorAdminModal from "../../components/modal/CreateJuniorAdmin";
 import ProfileCard from "../../components/ProfileCard";
+import { createJuniorAdmin, getAllJuniorAdmins } from "../../services/user";
+import useSWR from 'swr'
 
 const JuniorAdmin = () => {
+
+  const {
+    data: juniorAdmin,
+  } = useSWR(() => getAllJuniorAdmins());
+  
   const {
     ui: { modals },
   } = useAppSelector((state) => state);
@@ -20,9 +27,12 @@ const JuniorAdmin = () => {
     dispatch(
       toggleModal({
         name: Modals.CREATE_JUNIOR_ADMIN,
+        props: { createFunction: createJuniorAdmin, }
+        
       })
     );
   };
+
   return (
     <div>
       <AdminDashboardLayout pageTitle="Junior Admin">
@@ -41,7 +51,9 @@ const JuniorAdmin = () => {
           </Button>
         </div>
         <section id="juniorAdmin" >
-          <ProfileCard />
+          <ProfileCard 
+          data={juniorAdmin?.data}
+          />
         </section>
       </AdminDashboardLayout>
       <CreateJuniorAdminModal

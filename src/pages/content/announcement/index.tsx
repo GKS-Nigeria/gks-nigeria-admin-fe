@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AdminDashboardLayout from "../../../layout/AdminDashboardLayout";
 import { Text } from "../../../lib/Text";
 import Back from "../../../assets/icons/back.svg";
-import Post from "../../../components/contents/Post";
-import { Button } from "../../../lib/Button";
+import PostAnnouncement from "../../../components/contents/Announcement";
 
 const Announcement = () => {
   const navigate = useNavigate();
@@ -23,12 +22,8 @@ const Announcement = () => {
               <img src={Back} /> Back
             </Text>
           </div>
-          {/* <Text color="blue_6">Feed</Text> */}
-          <Post />
-          <div className="d-flex justify-content-between mt-4">
-              <div></div>
-              <Button variant="green">Publish</Button>
-          </div>
+
+          <PostAnnouncement />
         </div>
       </AdminDashboardLayout>
     </div>
