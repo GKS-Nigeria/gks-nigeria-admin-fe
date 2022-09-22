@@ -39,7 +39,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
     return members;
   });
 
-  const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
+  const tableHeaders = ["ID", "name", "branch", "address", "role","group", "option"];
 
   return (
     <>
@@ -68,10 +68,11 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
           {memberValues?.map((user: any) => {
             const fields = [
-              user._id,
+              "1",
               [user.firstName," ", user.lastName],
               user.branch,
               user.address,
+              user.role,
               user.group,
               // user.option,
             ];

@@ -9,6 +9,8 @@ import { theme } from "../src/theme/index";
 import Branches from "./pages/branches";
 import Content from "./pages/content";
 import { Provider as ReduxProvider } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import { store } from "./redux/store";
 import Member from "./pages/members/member";
 import Feed from "./pages/content/feed";
@@ -43,6 +45,7 @@ function App() {
             <Route path="members/*" element={<Members />} />
             <Route path="members/:id" element={<Member />} />
           </Routes>
+          <ToastContainer />
         </ReduxProvider>
       </ThemeProvider>
     </>

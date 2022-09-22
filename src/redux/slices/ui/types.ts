@@ -4,6 +4,7 @@ export interface UIState {
       
       [Modals.CREATE_BRANCH]: ModalProps;
       [Modals.CREATE_JUNIOR_ADMIN]: ModalProps;
+      [Modals.CONFIRMATION]: ModalProps;
     };
     redirectUrl?: string;
   }
@@ -17,6 +18,7 @@ export interface UIState {
     ASSIGN_JUNIOR_ADMIN = "assignJuniorAdmin",
     CREATE_BRANCH = "createBranch",
     CREATE_JUNIOR_ADMIN = "createJuniorAdmin",
+    CONFIRMATION = "confirmation",
    
   }
   

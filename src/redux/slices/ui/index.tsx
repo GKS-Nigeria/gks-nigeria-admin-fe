@@ -7,6 +7,7 @@ const initialState: UIState = {
     [Modals.ASSIGN_JUNIOR_ADMIN]: { isOpen: false, props: null },
     [Modals.CREATE_BRANCH]: { isOpen: false, props: null },
     [Modals.CREATE_JUNIOR_ADMIN]: { isOpen: false, props: null },
+    [Modals.CONFIRMATION]: { isOpen: false, props: null },
     
   },
   redirectUrl: undefined,

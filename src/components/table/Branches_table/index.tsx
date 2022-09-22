@@ -22,7 +22,8 @@ import { toggleModal } from "../../../redux/slices/ui";
 import { Modals } from "../../../redux/slices/ui/types";
 import { IBranch } from "../../../services/branch/types";
 import { useState, useEffect } from "react";
-import { getAllBranch } from "../../../services/branch";
+import { deleteSingleBranch, getAllBranch } from "../../../services/branch";
+import ConfirmationModal from "../../modal/Confirmation";
 
 const BranchesTable = () => {
   const { palette } = useTheme();
@@ -33,7 +34,7 @@ const BranchesTable = () => {
   const dispatch = useAppDispatch();
 
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
-  // const [numberOfBranches, setNumberOfBranches] = useState("");
+  // const [numberOfBranches, setNumberOfBranches] = useState();
 
   useEffect(() => {
     getAllBranch().then((res) => {
@@ -48,12 +49,49 @@ const BranchesTable = () => {
       })
     );
   };
-  const numOfGroups = branchApiResponse.map((items, idx) => {
-    return Object.values(items.groups)[idx];
+  const numOfGroups = branchApiResponse.map((items) => {
+    return (items.groups.length);
   });
 
-  console.log(numOfGroups);
+  const openDeleteModal = (branch: IBranch) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleBranch(branch._id)
+          },
+          onClosed() {
+            getAllBranch()
+           
+          },
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${branch.name}? You will permanently loose thier data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
 
+ 
+  // console.log(numOfGroups);
+  // const grp = numOfGroups.map((item) => {
+  //   return item
+  // }
+  //  )
+  // let grp:any
+
+  // for (let i = 0 ; i < numOfGroups.length; i++ ){
+  //    grp = numOfGroups[i]
+  //   console.log(grp);
+  //   {() => setNumberOfBranches(grp)}
+  // }
+  // console.log(grp);
+
+  
   const branchValues = branchApiResponse.map((results) => {
     return results.branch;
   });
@@ -99,8 +137,7 @@ const BranchesTable = () => {
               branch.name,
               branch.address,
               // branch.groups ,
-              // numOfGroups ||
-              "2",
+               numOfGroups ,
               branch.members.length,
               branch.admins || "-",
               // branch.option,
@@ -173,7 +210,7 @@ const BranchesTable = () => {
                     >
                       <DropdownItem
                         css={{ backgroundColor: "transparent !important" }}
-                        onClick={showAssignModal}
+                        // onClick={showAssignModal}
                       >
                         <LinkText
                           href=""
@@ -231,6 +268,7 @@ const BranchesTable = () => {
                       </DropdownItem>
                       <DropdownItem
                         css={{ backgroundColor: "transparent !important" }}
+                        onClick={() => openDeleteModal(branch)}
                       >
                         <Text color="red" className="fs-14 fw-500">
                           <img
@@ -253,6 +291,14 @@ const BranchesTable = () => {
           })}
         </tbody>
       </Table>
+
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
+
+
       <AssignModal
         showModal={modals.assignJuniorAdmin?.isOpen}
         toggle={() =>
