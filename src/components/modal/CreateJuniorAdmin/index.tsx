@@ -158,7 +158,7 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
                     {...getFieldProps(fieldName)}
                   >
                     <option value="">-select-</option>
-                    <option value={"63230ffc49be6c899ca0e8e2"}>Lekki</option>
+                    <option value={"63244684806b8d04045f5303"}>Lekki</option>
                     
                     {branchName.map((field, idx) => {
                       return (

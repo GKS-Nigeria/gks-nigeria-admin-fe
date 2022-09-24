@@ -9,6 +9,8 @@ import { theme } from "../src/theme/index";
 import Branches from "./pages/branches";
 import Content from "./pages/content";
 import { Provider as ReduxProvider } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import { store } from "./redux/store";
 import Member from "./pages/members/member";
 import Feed from "./pages/content/feed";
@@ -16,6 +18,7 @@ import Announcement from "./pages/content/announcement";
 import Notification from "./pages/content/notification";
 import Calender from "./pages/content/calender";
 import DailyDevotion from "./pages/content/dailyDevotion";
+import Groups from "./pages/branches/groups";
 
 const { Routes, Route } = require("react-router-dom");
 
@@ -34,6 +37,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/junior_admin/*" element={<JuniorAdmin />} />
             <Route path="/branch/*" element={<Branches />} />
+            <Route path="/groups/:id" element={<Groups />} />
             <Route path="/content/*" element={<Content />} />
             <Route path="/content/feed" element={<Feed />} />
             <Route path="/content/announcement" element={<Announcement />} />
@@ -43,6 +47,7 @@ function App() {
             <Route path="members/*" element={<Members />} />
             <Route path="members/:id" element={<Member />} />
           </Routes>
+          <ToastContainer />
         </ReduxProvider>
       </ThemeProvider>
     </>

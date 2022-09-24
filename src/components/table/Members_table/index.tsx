@@ -39,7 +39,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
     return members;
   });
 
-  const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
+  const tableHeaders = ["ID", "name", "branch", "address", "role","group", "option"];
 
   return (
     <>
@@ -66,12 +66,13 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {memberValues?.map((user: any) => {
+          {memberValues?.map((user: any, idx) => {
             const fields = [
-              user._id,
+              idx + 1,
               [user.firstName," ", user.lastName],
               user.branch,
               user.address,
+              user.role,
               user.group,
               // user.option,
             ];
@@ -116,7 +117,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                           "0px 0px 0px 1px rgba(152, 161, 179, 0.1), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 5px 15px rgba(0, 0, 0, 0.08)",
                       }}
                     >
-                      <DropdownItem css={{ backgroundColor: "transparent" }}>
+                      <DropdownItem css={{ backgroundColor: "transparent !important" }}>
                         <LinkText
                           href="/members/id"
                           color="blue_6"
@@ -130,7 +131,7 @@ const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
                           View
                         </LinkText>
                       </DropdownItem>
-                      <DropdownItem css={{ backgroundColor: "transparent " }}>
+                      <DropdownItem css={{ backgroundColor: "transparent !important " }}>
                         <Text color="red" className="fs-14 fw-500">
                           <img
                             src={Delete}

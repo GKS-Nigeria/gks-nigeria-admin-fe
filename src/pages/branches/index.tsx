@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 // import { LinkText, Text } from "../../lib/Text";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import { Button } from "../../lib/Button";
 import BranchesTable from "../../components/table/Branches_table";
 import AdminDashboardLayout from "../../layout/AdminDashboardLayout";
@@ -10,23 +10,29 @@ import { toggleModal } from "../../redux/slices/ui";
 import { Modals } from "../../redux/slices/ui/types";
 import CreateBranchModal from "../../components/modal/createBranch";
 import { createBranch, getAllBranch } from "../../services/branch";
+// import { IBranch } from '../../services/branch/types';
+
 
 const Branches = () => {
+
   const [numberOfBranches, setNumberOfBranches] = useState("");
 
-  useEffect(() => {
-    getAllBranch()
-      .then((res) => {
-        setNumberOfBranches(res.data.results.length);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  useEffect( () => {
+    getAllBranch().then((res) => {
+      setNumberOfBranches(res.data.results.length);
+    }).catch((err) => console.log(err)) 
+  }, [])
+ 
 
   const {
     ui: { modals },
   } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
+
+  // console.log(branchApiResponse)
+  // console.log(branchApiResponse[1].branch.name)
+  
 
   const showCreateBranchModal = () => {
     dispatch(
@@ -57,9 +63,13 @@ const Branches = () => {
         </div>
 
         <section id="members-table">
-          <BranchesTable />
+          <BranchesTable 
+          // data={branch?.data}
+           />
+        
         </section>
       </AdminDashboardLayout>
+
       <CreateBranchModal
         showModal={modals.createBranch?.isOpen}
         toggle={() => dispatch(toggleModal({ name: Modals.CREATE_BRANCH }))}

@@ -3,6 +3,7 @@ import { USER_CODE_KEY } from "../../constants/index";
 import { Api } from "../../helpers/api";
 import {
   ICreateJuniorAdminOptions,
+  // IJuniorAdmin,
   IJuniorAdminApiResponse,
   IJuniorAdminsApiResponse,
   ILoginUserOptions,
@@ -23,7 +24,7 @@ export const loadAuthToken = () => {
 export const saveAuthToken = (code: string) =>
   localStorage.setItem(USER_CODE_KEY, code);
 
-export const removeAuthToken = () => localStorage.removeItem(USER_CODE_KEY);
+export const removeAuthToken = () => localStorage.removeItem("token");
 
 export const requestToken = async (
   email: string,
@@ -37,7 +38,7 @@ export const requestToken = async (
 };
 
 export const logoutUser = () => {
-  // removeAuthToken();
+  removeAuthToken();
 
   console.log("logout")
 
@@ -68,7 +69,12 @@ export const getAllMembers = async (params?: any) => {
   return res;
 };
 
-// export const getSingleUser = async (id: IUser["_id"]) => {
+// export const removeSingleUser = async (id: IJuniorAdmin["_id"]) => {
+//   const res = await Api.delete(`/junior_admin/${id}`);
+//   return res;
+// };
+
+// export const getSingleUser = async (id: IJuniorAdmin["_id"]) => {
 //   const res: IUserApiResponse = await Api.get(`/junior-admin/${id}`);
 //   return res;
 // };
@@ -81,7 +87,4 @@ export const getAllMembers = async (params?: any) => {
 //   return res;
 // };
 
-// export const removeSingleUser = async (id: IUser["_id"]) => {
-//   const res = await Api.delete(`/junior_admin/${id}`);
-//   return res;
-// };
+

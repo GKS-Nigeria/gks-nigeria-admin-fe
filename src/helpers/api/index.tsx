@@ -2,12 +2,13 @@
 import _axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { API_BASE_URL } from "../../constants/index";
 import { IApiErrorResponse, IApiResponse } from "./types";
+import { wrapPromiseWithLoader } from "./../toast";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
     custom?: {
       skipToast: boolean;
     };
-    config?: any
+    // config?: any
   }
    
 const axios = _axios.create({
@@ -70,10 +71,13 @@ export const Api = {
       data: any,
       config?: CustomAxiosRequestConfig
     ): Promise<IApiResponse> =>
-        axios
-          .post(endpoint, data, config)
-          .then(handleApiSuccess)
-          .catch(handleApiError),
+    wrapPromiseWithLoader(
+      axios
+        .post(endpoint, data, config)
+        .then(handleApiSuccess)
+        .catch(handleApiError),
+      { ...(config ? config.custom : {}) }
+    ),
     put: (
       endpoint: string,
       data: any,
