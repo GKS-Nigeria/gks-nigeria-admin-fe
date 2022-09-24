@@ -9,17 +9,14 @@ import { toggleModal } from "../../../redux/slices/ui";
 import { Modals } from "../../../redux/slices/ui/types";
 import CreateBranchModal from "../../../components/modal/createBranch";
 import { createBranch } from "../../../services/branch";
-// import { IBranch } from '../../services/branch/types';
-
+import GroupsCard from "../../../components/GroupsCard";
 
 const Groups = () => {
-
   const {
     ui: { modals },
   } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
-  
 
   const showCreateBranchModal = () => {
     dispatch(
@@ -34,10 +31,9 @@ const Groups = () => {
     <div>
       <AdminDashboardLayout pageTitle="Groups">
         <div className="d-flex justify-content-between">
-          <div>
-           
+          <div css={{ marginLeft: "20px" }} className="fw-bold fs-16">
+            Branch Name
           </div>
-          {/* <AssignModal /> */}
           <Button
             variant="green"
             className="d-flex align-items-center fs-14 justify-content-center"
@@ -50,8 +46,7 @@ const Groups = () => {
         </div>
 
         <section id="groups">
-          
-        
+          <GroupsCard />
         </section>
       </AdminDashboardLayout>
 
