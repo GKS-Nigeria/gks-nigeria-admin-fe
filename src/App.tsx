@@ -18,6 +18,7 @@ import Announcement from "./pages/content/announcement";
 import Notification from "./pages/content/notification";
 import Calender from "./pages/content/calender";
 import DailyDevotion from "./pages/content/dailyDevotion";
+import Groups from "./pages/branches/groups";
 
 const { Routes, Route } = require("react-router-dom");
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/junior_admin/*" element={<JuniorAdmin />} />
             <Route path="/branch/*" element={<Branches />} />
+            <Route path="/groups/:id" element={<Groups />} />
             <Route path="/content/*" element={<Content />} />
             <Route path="/content/feed" element={<Feed />} />
             <Route path="/content/announcement" element={<Announcement />} />

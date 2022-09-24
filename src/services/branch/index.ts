@@ -19,6 +19,11 @@ export const getAllBranch = async (params?: any) => {
   return res;
 };
 
+export const getAllGroups = async (id: IBranch["_id"]) => {
+  const res: IBranchesApiResponse = await Api.get(`admin/get-groups/${id}`);
+  return res;
+};
+
 export const deleteSingleBranch = async (id: IBranch["_id"]) => {
   const res = await Api.delete(`admin/branch/delete/${id}`);
   return res;
