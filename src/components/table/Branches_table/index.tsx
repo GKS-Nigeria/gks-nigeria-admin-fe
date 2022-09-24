@@ -151,7 +151,8 @@ const groups = groupsInABranch()
               branch.admins || "-",
               // branch.option,
             ];
-
+            const link = `branch/groups/${branch._id}`
+           
             return (
               <tr key={`${branch._id}`}>
                 {fields.map((field,) => {
@@ -222,7 +223,7 @@ const groups = groupsInABranch()
                         // onClick={showAssignModal}
                       >
                         <LinkText
-                          // href={link}
+                          href={link}
                           color="blue_6"
                           className="fs-14 fw-500"
                         >

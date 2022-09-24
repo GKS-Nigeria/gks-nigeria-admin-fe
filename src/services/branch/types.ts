@@ -9,7 +9,7 @@ export interface ICreateBranchOptions {
   }
   
   export interface IBranch extends Document {
-    name: string;
+    name: string | any;
     address: string;
     members: string;
     branch: string | any;
@@ -22,6 +22,7 @@ export interface ICreateBranchOptions {
   export interface IBranchApiResponse extends IApiResponse {
     data: IBranch;
     message: string;
+    results: string | any;
     branch: string | any;
   }
   

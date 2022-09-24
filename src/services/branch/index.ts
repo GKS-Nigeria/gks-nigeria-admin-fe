@@ -19,7 +19,7 @@ export const getAllBranch = async (params?: any) => {
   return res;
 };
 
-export const getAllGroups = async (id: IBranch["_id"]) => {
+export const getAllGroups = async (id: any["_id"]) => {
   const res: IBranchesApiResponse = await Api.get(`admin/get-groups/${id}`);
   return res;
 };
