@@ -27,75 +27,7 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
   const { palette } = useTheme();
 
-  const dummyData = [
-    {
-      _id: "1",
-      branch: "Ojota",
-      group: "choir",
-      name: "John Boyega",
-    },
-    {
-      _id: "2",
-      branch: "Ojota",
-      group: "Drummer",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "3",
-      branch: "Isolo",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "4",
-      branch: "Ojota",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "5",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "6",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "7",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
 
-    {
-      _id: "8",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "53",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "52",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "15",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-  ];
   return (
     <div className="d-flex flex-wrap ">
       {data?.map((user: IJuniorAdmin, ) => {

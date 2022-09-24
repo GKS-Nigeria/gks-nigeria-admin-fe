@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button as StrapButton } from "reactstrap";
 import styled from "@emotion/styled";
 import { ThemeColors } from "../../theme/style";

@@ -20,11 +20,8 @@ import Delete from "../../../assets/icons/delete.svg";
 import { IMember } from "../../../services/user/types";
 import { getAllMembers } from "../../../services/user";
 
-interface MembersTableProps {
-  data?: any[];
-}
 
-const MembersTable: React.FC<MembersTableProps> = ({ data }) => {
+const MembersTable = () => {
   const { palette } = useTheme();
 
   const [memberApiResponse, setMemberApiResponse] = useState<IMember[]>([]);
