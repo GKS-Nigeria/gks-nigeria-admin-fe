@@ -6,11 +6,16 @@ import {
     IBranchApiResponse,
     IBranchesApiResponse,
     IBranch,
+    ICreateGroupsOptions,
   
 } from "./types";
 
 export const createBranch = async (data: ICreateBranchOptions) => {
   const res: IBranchApiResponse = await Api.post("admin/create-branch", data);
+  return res;
+};
+export const createGroup = async (data: ICreateGroupsOptions) => {
+  const res: IBranchApiResponse = await Api.post("admin/create-group", data);
   return res;
 };
 
@@ -26,5 +31,9 @@ export const getAllGroups = async (id: any["_id"]) => {
 
 export const deleteSingleBranch = async (id: IBranch["_id"]) => {
   const res = await Api.delete(`admin/branch/delete/${id}`);
+  return res;
+};
+export const deleteSingleGroup = async (id: IBranch["_id"]) => {
+  const res = await Api.delete(`admin/group/delete/${id}`);
   return res;
 };

@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-lone-blocks */
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from "react";
-import {
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  FormGroup,
-  Label,
-} from "reactstrap";
+import { ModalHeader, ModalBody, FormGroup } from "reactstrap";
 import { Input } from "../../../lib/form/Input";
 import { Text } from "../../../lib/Text";
 import { Button } from "../../../lib/Button";
@@ -21,8 +14,6 @@ import {
   IJuniorAdminApiResponse,
   IJuniorAdmin,
 } from "../../../services/user/types";
-import { createJuniorAdmin } from "../../../services/user";
-// import { IJuniorAdminApiResponse } from "../../../services/user/types";
 import { juniorAdminSchema } from "../../../services/user/schema";
 import { getAllBranch } from "../../../services/branch";
 import { IBranch } from "../../../services/branch/types";
@@ -77,7 +68,6 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
     },
   });
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
-  const [branchName, setBranchName] = useState(["isolo", "ajah"]);
 
   useEffect(() => {
     getAllBranch().then((res) => {
@@ -85,17 +75,9 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
     });
   }, []);
 
-  const branchApiResponseData = branchApiResponse;
-  const branchData = branchApiResponseData.map((item) => {
-    return item.branch.name;
+  const branchData = branchApiResponse.map((item) => {
+    return item.branch;
   });
-  // const branchData = branchApiResponseData.map((item) => {
-  //   return item.branch.name
-  // })
-  // setBranchName(  item.branch.name )
-  // branchApiResponseData.map((item, idx) => {
-  //     setBranchName(  item.branch.name ) })
-  // setBranchName( branchData )
 
   console.log(branchData);
   useEffect(() => {
@@ -158,12 +140,11 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
                     {...getFieldProps(fieldName)}
                   >
                     <option value="">-select-</option>
-                    <option value={"63244684806b8d04045f5303"}>Lekki</option>
-                    
-                    {branchName.map((field, idx) => {
+
+                    {branchData.map((field, idx) => {
                       return (
-                        <option key={idx} value={field}>
-                          {field}
+                        <option key={idx} value={field._id}>
+                          {field.name}
                         </option>
                       );
                     })}
@@ -177,15 +158,6 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
                 </div>
               );
             })}
-            {/* <Label for="branchName">
-            <Text color="blue_6" className="fs-13 fw-bold text-capitalize mb-1">
-              assign to branch
-            </Text>
-          </Label>
-          <Input id="branchName" type="select" placeholder="Branch" >
-          <option value=""></option>
-          <option value={"63230ffc49be6c899ca0e8e2"}>Lekki</option>
-          </Input> */}
           </FormGroup>
 
           <Button
@@ -199,8 +171,6 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
           </Button>
         </ModalBody>
       </form>
-      {/* )}
-      </Formik> */}
     </SideModal>
   );
 };

@@ -16,28 +16,55 @@ import Edit from "../../assets/icons/edit.svg";
 import { IBranch } from "../../services/branch/types";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getAllGroups } from "../../services/branch";
+import { deleteSingleGroup, getAllGroups } from "../../services/branch";
+import { toggleModal } from "../../redux/slices/ui";
+import { useAppSelector, useAppDispatch } from "../../hooks";
+import { Modals } from "../../redux/slices/ui/types";
+import ConfirmationModal from "../modal/Confirmation";
 
 const GroupsCard = () => {
   const { id } = useParams();
 
-  console.log(id);
+  //   console.log(id);
   const [groupsApiResponse, setGroupsApiResponse] = useState<IBranch[]>([]);
   useEffect(() => {
     getAllGroups(id).then((res) => {
       setGroupsApiResponse(res.data.results);
     });
-  }, []);
+  }, [groupsApiResponse]);
 
   const groupValues = groupsApiResponse.map((result) => {
     return result;
   });
   const { palette } = useTheme();
+  const {
+    ui: { modals },
+  } = useAppSelector((state) => state);
 
+  const dispatch = useAppDispatch();
+
+  const openDeleteModal = (group: IBranch) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleGroup(group._id);
+          },
+
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${group.name}? You will permanently loose their data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
   return (
     <div className="d-flex flex-wrap ">
       {groupValues?.map((group: IBranch, idx) => {
-        
         return (
           <div
             key={idx}
@@ -95,6 +122,7 @@ const GroupsCard = () => {
                     </DropdownItem>
                     <DropdownItem
                       css={{ backgroundColor: "transparent !important" }}
+                      onClick={() => openDeleteModal(group)}
                     >
                       <Text color="red" className="fs-14 fw-500">
                         <img
@@ -125,13 +153,18 @@ const GroupsCard = () => {
                   {group.members.length}
                 </Text>
                 <Text color="white" className="fs-12">
-                branch name
+                  branch name
                 </Text>
               </div>
             </div>
           </div>
         );
       })}
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
     </div>
   );
 };

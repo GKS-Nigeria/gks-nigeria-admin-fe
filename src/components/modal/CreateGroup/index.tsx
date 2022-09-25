@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-lone-blocks */
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from "react";
+import React, {useEffect } from "react";
 import {
   ModalHeader,
   ModalBody,
+ 
   FormGroup,
+ 
 } from "reactstrap";
 import { Input } from "../../../lib/form/Input";
 import { Text } from "../../../lib/Text";
@@ -15,30 +18,32 @@ import Close from "../../../assets/icons/close.svg";
 import { useFormik } from "formik";
 import {
   IBranchApiResponse,
-  ICreateBranchOptions,
+  ICreateGroupsOptions,
 } from "../../../services/branch/types";
 import { IBranch } from "../../../services/branch/types";
-import { branchSchema } from "../../../services/branch/schema";
+import { useParams } from "react-router-dom";
+ 
 
 interface ModalProps {
   showModal: boolean;
   toggle: () => void;
   onClosed?: () => void;
-  createFunction: (data: ICreateBranchOptions) => Promise<IBranchApiResponse>;
+  createFunction: (data: ICreateGroupsOptions) => Promise<IBranchApiResponse>;
   onSuccess: () => void;
-  branch?: IBranch;
+  group?: IBranch;
 }
 
-const CreateBranchModal: React.FC<ModalProps> = ({
+const CreateGroupModal: React.FC<ModalProps> = ({
   showModal,
   toggle,
   createFunction,
   onSuccess,
-  branch,
+  group,
 }) => {
-  const initialValues: ICreateBranchOptions = {
+  const { id } = useParams();
+  const initialValues: ICreateGroupsOptions = {
     name: "",
-    address: "",
+    branchId: `${id}`,
   };
 
   const {
@@ -47,12 +52,10 @@ const CreateBranchModal: React.FC<ModalProps> = ({
     setFieldValue,
     isValid,
     isSubmitting,
-    touched,
-    errors,
     resetForm,
   } = useFormik({
     initialValues,
-    validationSchema: branchSchema,
+    
     onSubmit(values, { setSubmitting }) {
       createFunction(values)
         .then(() => {
@@ -65,21 +68,21 @@ const CreateBranchModal: React.FC<ModalProps> = ({
   });
 
   useEffect(() => {
-    if (!branch) {
+    if (!group) {
       resetForm();
       return;
     }
-    setFieldValue("name", branch.name, true);
-    setFieldValue("address", branch.address, true);
-  }, [resetForm, setFieldValue, branch]);
+    setFieldValue("name", group.name, true);
+    setFieldValue("branch", group.address, true);
+  }, [resetForm, setFieldValue, group]);
 
-  const labels = ["name", "address"];
+  const labels = ["group name",];
   return (
     <SideModal isOpen={showModal} fullscreen toggle={toggle}>
       <ModalHeader className="border-0 ">
         <div className="d-flex">
           <Text color="blue_6" className="fs-22 pb-4 fw-bold text-capitalize">
-            Create branch
+            Create group
           </Text>
           <div onClick={toggle} css={{ marginLeft: 230 }}>
             <img src={Close} alt="" />
@@ -98,20 +101,14 @@ const CreateBranchModal: React.FC<ModalProps> = ({
                     className="fs-13 fw-bold text-capitalize mb-1"
                   >
                     {label}
-                    <Text color="red" as="sup">
-                      *
-                    </Text>
+                   
                   </Text>
                   <Input
                     type="text"
                     placeholder={label}
                     {...getFieldProps(fieldName)}
                   />
-                  {touched[fieldName] && errors[fieldName] ? (
-                    <Text color="red" className="fs-13 m-0">
-                      {errors[fieldName]}
-                    </Text>
-                  ) : null}
+                  
                 </div>
               );
             })}
@@ -131,4 +128,4 @@ const CreateBranchModal: React.FC<ModalProps> = ({
   );
 };
 
-export default CreateBranchModal;
+export default CreateGroupModal;

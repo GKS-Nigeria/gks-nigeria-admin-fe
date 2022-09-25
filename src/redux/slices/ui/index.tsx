@@ -7,6 +7,7 @@ const initialState: UIState = {
   modals: {
     [Modals.ASSIGN_JUNIOR_ADMIN]: { isOpen: false, props: null },
     [Modals.CREATE_BRANCH]: { isOpen: false, props: null },
+    [Modals.CREATE_GROUP]: { isOpen: false, props: null },
     [Modals.CREATE_JUNIOR_ADMIN]: { isOpen: false, props: null },
     [Modals.CONFIRMATION]: { isOpen: false, props: null },
     

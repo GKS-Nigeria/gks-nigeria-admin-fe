@@ -4,6 +4,7 @@ export interface UIState {
       [Modals.ASSIGN_JUNIOR_ADMIN]: ModalProps;
       
       [Modals.CREATE_BRANCH]: ModalProps;
+      [Modals.CREATE_GROUP]: ModalProps;
       [Modals.CREATE_JUNIOR_ADMIN]: ModalProps;
       [Modals.CONFIRMATION]: ModalProps;
     };
@@ -18,6 +19,7 @@ export interface UIState {
   export enum Modals {
     ASSIGN_JUNIOR_ADMIN = "assignJuniorAdmin",
     CREATE_BRANCH = "createBranch",
+    CREATE_GROUP = "createGroup",
     CREATE_JUNIOR_ADMIN = "createJuniorAdmin",
     CONFIRMATION = "confirmation",
    

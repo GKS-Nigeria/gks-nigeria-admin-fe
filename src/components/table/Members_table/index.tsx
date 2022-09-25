@@ -76,9 +76,9 @@ const MembersTable = () => {
 
             return (
               <tr key={`${user._id}`}>
-                {fields.map((field) => {
+                {fields.map((field, idx) => {
                   return (
-                    <td key={`${field}-${user._id}`} className="py-3">
+                    <td key={`${idx}-${user._id}`} className="py-3">
                       <Text
                         color="blue_6"
                         className="fs-14"

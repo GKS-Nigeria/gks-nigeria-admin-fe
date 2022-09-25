@@ -7,9 +7,9 @@ import Plus from "../../../assets/icons/plus.svg";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { toggleModal } from "../../../redux/slices/ui";
 import { Modals } from "../../../redux/slices/ui/types";
-import CreateBranchModal from "../../../components/modal/createBranch";
-import { createBranch } from "../../../services/branch";
+import { createGroup } from "../../../services/branch";
 import GroupsCard from "../../../components/GroupsCard";
+import CreateGroupModal from "../../../components/modal/CreateGroup";
 
 const Groups = () => {
   const {
@@ -18,11 +18,11 @@ const Groups = () => {
 
   const dispatch = useAppDispatch();
 
-  const showCreateBranchModal = () => {
+  const showCreateGroupModal = () => {
     dispatch(
       toggleModal({
-        name: Modals.CREATE_BRANCH,
-        props: { createFunction: createBranch },
+        name: Modals.CREATE_GROUP,
+        props: { createFunction: createGroup },
       })
     );
   };
@@ -38,7 +38,7 @@ const Groups = () => {
             variant="green"
             className="d-flex align-items-center fs-14 justify-content-center"
             css={{ margin: "0px 22px 22px 2px" }}
-            onClick={showCreateBranchModal}
+            onClick={showCreateGroupModal}
           >
             <img src={Plus} alt="" className="me-2" />
             Create New
@@ -50,10 +50,10 @@ const Groups = () => {
         </section>
       </AdminDashboardLayout>
 
-      <CreateBranchModal
-        showModal={modals.createBranch?.isOpen}
-        toggle={() => dispatch(toggleModal({ name: Modals.CREATE_BRANCH }))}
-        {...modals.createBranch?.props}
+      <CreateGroupModal
+        showModal={modals.createGroup?.isOpen}
+        toggle={() => dispatch(toggleModal({ name: Modals.CREATE_GROUP }))}
+        {...modals.createGroup?.props}
       />
     </div>
   );
