@@ -34,13 +34,17 @@ const BranchesTable = () => {
   const dispatch = useAppDispatch();
 
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
-  // const [numberOfBranches, setNumberOfBranches] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAllBranch().then((res) => {
       setBranchApiResponse(res.data.results);
+      if (res.success === true) {
+        setLoading(false);
+      }
     });
-  }, [branchApiResponse]);
+  }, []);
+
 
   const showAssignModal = () => {
     dispatch(
@@ -49,9 +53,6 @@ const BranchesTable = () => {
       })
     );
   };
-  const numOfGroups = branchApiResponse.map((items) => {
-    return (items.groups.length);
-  });
 
   const openDeleteModal = (branch: IBranch) => {
     dispatch(
@@ -59,14 +60,13 @@ const BranchesTable = () => {
         name: Modals.CONFIRMATION,
         props: {
           confirmFunction() {
-            return deleteSingleBranch(branch._id)
+            return deleteSingleBranch(branch.branch._id);
           },
           onClosed() {
-            getAllBranch()
-           
+            getAllBranch();
           },
           header: "Delete Branch",
-          desc: `Are you sure you want to delete ${branch.name}? You will permanently loose their data`,
+          desc: `Are you sure you want to delete ${branch.branch.name}? You will permanently loose their data`,
           button: {
             text: "delete",
             color: "red",
@@ -76,33 +76,8 @@ const BranchesTable = () => {
     );
   };
 
-//   const getGroupsData = (branch: IBranch) => {
-//     // const link = `branch/${branch._id}`
-//     return getAllGroups(branch._id)
-//   }
-// console.log(getGroupsData)
-
-//  const link = `branch/${id}`
-  // console.log(numOfGroups);
-  // const grp = numOfGroups.map((item) => {
-  //   return item
-  // }
-  //  )
-  let grp
-const groupsInABranch = () => {
-  for (let i = 0 ; i < numOfGroups.length; i++ ){
-      grp = numOfGroups[i]
-      // {() => setNumberOfBranches(grp)}
-      return grp
-  }
-}
-const groups = groupsInABranch()
-
-  
-
-  
   const branchValues = branchApiResponse.map((results) => {
-    return results.branch;
+    return results;
   });
 
   const tableHeaders = [
@@ -138,28 +113,33 @@ const groups = groupsInABranch()
             })}
           </tr>
         </thead>
-        {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
+        {loading && (
+          <Text
+            color="blue_6"
+            css={{ position: "absolute", left: "50%", top: "50%" }}
+          >
+            Loading...
+          </Text>
+        )}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {branchValues?.map((branch: any, idx) => {
+          {branchValues?.map((result: IBranch, idx) => {
             const fields = [
-               idx + 1,
-              branch.name,
-              branch.address,
-              // branch.groups ,
-              groups ,
-              branch.members.length,
-              branch.admins || "-",
-              // branch.option,
+              idx + 1,
+              result.branch.name,
+              result.branch.address,
+              result.groups.length,
+              result.branch.members.length,
+              result.admins || "-",
             ];
-            const link = `branch/groups/${branch._id}`
-           
+            const link = `branch/groups/${result.branch._id}`;
+
             return (
-              <tr key={`${branch._id}`}>
-                {fields.map((field,) => {
-                  if (field === groups) {
+              <tr key={`${result.branch._id}`}>
+                {fields.map((field, idx) => {
+                  if (field === result.groups.length) {
                     return (
                       <td
-                        key={branch._id}
+                        key={`${idx}-${result.branch._id}`}
                         className="align-middle"
                       >
                         <Text
@@ -178,7 +158,7 @@ const groups = groupsInABranch()
                     );
                   }
                   return (
-                    <td key={branch._id} className="py-3">
+                    <td key={`${idx}-${result.branch._id}`} className="py-3">
                       <Text
                         color="blue_6"
                         className="fs-14"
@@ -278,7 +258,7 @@ const groups = groupsInABranch()
                       </DropdownItem>
                       <DropdownItem
                         css={{ backgroundColor: "transparent !important" }}
-                        onClick={() => openDeleteModal(branch)}
+                        onClick={() => openDeleteModal(result)}
                       >
                         <Text color="red" className="fs-14 fw-500">
                           <img
@@ -307,7 +287,6 @@ const groups = groupsInABranch()
         {...modals.confirmation.props}
         toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
       />
-
 
       <AssignModal
         showModal={modals.assignJuniorAdmin?.isOpen}
