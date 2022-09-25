@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource @emotion/react */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
 import { Label } from "reactstrap";
 import { Input } from "../../../lib/form/Input";
@@ -17,6 +17,8 @@ import {
 } from "../../../services/content/types";
 import { postDailyDevotion } from "../../../services/content";
 import { Button } from "../../../lib/Button";
+import { getAllBranch } from "../../../services/branch";
+import { IBranch } from "../../../services/branch/types";
 
 interface PostProps {
   postContent?: IPost;
@@ -50,6 +52,18 @@ const ContentDailyDevotion: React.FC<PostProps> = ({ postContent }) => {
         })
         .finally(() => setSubmitting(false));
     },
+  });
+
+  const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
+
+  useEffect(() => {
+    getAllBranch().then((res) => {
+      setBranchApiResponse(res.data.results);
+    });
+  }, []);
+
+  const branchData = branchApiResponse.map((item) => {
+    return item.branch;
   });
 
   useEffect(() => {
@@ -166,7 +180,13 @@ const ContentDailyDevotion: React.FC<PostProps> = ({ postContent }) => {
                 >
                   <option value="">-select-</option>
                   <option value="all">All</option>
-                  <option value="62ddb886fb125e6e7b873bea">Test branch</option>
+                  {branchData.map((field, idx) => {
+                    return (
+                      <option key={idx} value={field._id}>
+                        {field.name}
+                      </option>
+                    );
+                  })}
                 </Input>
               </div>
               <div>

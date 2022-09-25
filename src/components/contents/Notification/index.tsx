@@ -30,8 +30,6 @@ const ContentNotification: React.FC<PostProps> = ({ postContent }) => {
     setFieldValue,
     isValid,
     isSubmitting,
-    touched,
-    errors,
     resetForm,
   } = useFormik({
     initialValues,

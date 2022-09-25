@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-lone-blocks */
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from "react";
-import {
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  FormGroup,
-  Label,
-} from "reactstrap";
+import { ModalHeader, ModalBody, FormGroup } from "reactstrap";
 import { Input } from "../../../lib/form/Input";
 import { Text } from "../../../lib/Text";
 import { Button } from "../../../lib/Button";
@@ -82,8 +75,7 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
     });
   }, []);
 
-  const branchApiResponseData = branchApiResponse;
-  const branchData = branchApiResponseData.map((item) => {
+  const branchData = branchApiResponse.map((item) => {
     return item.branch;
   });
 
