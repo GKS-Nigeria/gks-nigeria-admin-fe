@@ -59,7 +59,6 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
     onSubmit(values, { setSubmitting }) {
       createFunction(values)
         .then(() => {
-          console.log("submittinggg");
           onSuccess();
           toggle();
           resetForm();
@@ -79,7 +78,6 @@ const CreateJuniorAdminModal: React.FC<ModalProps> = ({
     return item.branch;
   });
 
-  console.log(branchData);
   useEffect(() => {
     if (!juniorAdmin) {
       resetForm();

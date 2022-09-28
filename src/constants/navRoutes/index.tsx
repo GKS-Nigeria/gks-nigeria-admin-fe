@@ -52,7 +52,6 @@ function Layout() {
         <ActiveLinkStyle to="/members">Members</ActiveLinkStyle>
         <ActiveLinkStyle to="/content">Content</ActiveLinkStyle>
       </nav>
-
     </div>
   );
 }
@@ -62,7 +61,7 @@ const NavRoutes = () => {
     <div>
       <div>
         <Routes>
-          <Route path="/*" element={<Layout />}></Route>
+          <Route path="" element={<Layout />}></Route>
         </Routes>
       </div>
     </div>
