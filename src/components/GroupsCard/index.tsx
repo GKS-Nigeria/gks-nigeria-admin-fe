@@ -25,7 +25,6 @@ import ConfirmationModal from "../modal/Confirmation";
 const GroupsCard = () => {
   const { id } = useParams();
 
-  //   console.log(id);
   const [groupsApiResponse, setGroupsApiResponse] = useState<IBranch[]>([]);
   useEffect(() => {
     getAllGroups(id).then((res) => {

@@ -127,8 +127,8 @@ const BranchesTable = () => {
               idx + 1,
               result.branch.name,
               result.branch.address,
-              result.groups.length,
-              result.branch.members.length,
+              result.groups.length ,
+              result.branch.members.length || "-",
               result.admins || "-",
             ];
             const link = `branch/groups/${result.branch._id}`;
@@ -164,7 +164,7 @@ const BranchesTable = () => {
                         className="fs-14"
                         css={{ padding: "0px 20px" }}
                       >
-                        {field ? field : "-"}
+                        {field}
                       </Text>
                     </td>
                   );

@@ -39,9 +39,6 @@ export const requestToken = async (
 
 export const logoutUser = () => {
   removeAuthToken();
-
-  console.log("logout")
-
 };
 
 export const loginUser = async (data: ILoginUserOptions) => {
