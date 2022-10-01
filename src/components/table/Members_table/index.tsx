@@ -12,31 +12,64 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import { useState, useEffect } from "react";
-// import { Routes, Route, useParams, Link } from "react-router-dom";
 
 import Option from "../../../assets/icons/ellipsisHorizontal.svg";
 import View from "../../../assets/icons/view.svg";
 import Delete from "../../../assets/icons/delete.svg";
 import { IMember } from "../../../services/user/types";
-import { getAllMembers } from "../../../services/user";
+import { deleteSingleMember, getAllMembers } from "../../../services/user";
+import { Modals } from "../../../redux/slices/ui/types";
+import { toggleModal } from "../../../redux/slices/ui";
+import { useAppSelector, useAppDispatch } from "../../../hooks";
 
+import ConfirmationModal from "../../modal/Confirmation";
 
 const MembersTable = () => {
   const { palette } = useTheme();
+  const {
+    ui: { modals },
+  } = useAppSelector((state) => state);
+
+  const dispatch = useAppDispatch();
 
   const [memberApiResponse, setMemberApiResponse] = useState<IMember[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getAllMembers().then((res) => {
       setMemberApiResponse(res.data.results);
+      if (res.success === true) {
+        setLoading(false);
+      }
     });
-  }, []);
- 
+  }, [memberApiResponse]);
+
+  const openDeleteModal = (member: IMember) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleMember(member._id);
+          },
+          onClosed() {
+            getAllMembers();
+          },
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${member.firstName}? You will permanently loose their data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
   const memberValues = memberApiResponse.map((members) => {
     return members;
   });
 
-  const tableHeaders = ["ID", "name", "branch", "address", "role","group", "option"];
+  const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
 
   return (
     <>
@@ -66,14 +99,12 @@ const MembersTable = () => {
           {memberValues?.map((user: any, idx) => {
             const fields = [
               idx + 1,
-              [user.firstName," ", user.lastName],
-              user.branch,
-              user.address,
-              user.role,
+              [user.firstName, " ", user.lastName],
+              `${user.branch ? user.branch.name : "-"}`,
+              `${user.branch ? user.branch.address : "-"}`,
               user.group,
-              // user.option,
             ];
-
+            const link = `members/${user._id}`;
             return (
               <tr key={`${user._id}`}>
                 {fields.map((field, idx) => {
@@ -82,7 +113,7 @@ const MembersTable = () => {
                       <Text
                         color="blue_6"
                         className="fs-14"
-                        css={{padding: "0px 20px"}}
+                        css={{ padding: "0px 20px" }}
                       >
                         {field ? field : "-"}
                       </Text>
@@ -102,7 +133,11 @@ const MembersTable = () => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22, paddingRight: "20px" }}
+                        css={{
+                          color: palette.black,
+                          fontSize: 22,
+                          paddingRight: "20px",
+                        }}
                       />
                     </DropdownToggle>
                     <DropdownMenu
@@ -114,9 +149,11 @@ const MembersTable = () => {
                           "0px 0px 0px 1px rgba(152, 161, 179, 0.1), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 5px 15px rgba(0, 0, 0, 0.08)",
                       }}
                     >
-                      <DropdownItem css={{ backgroundColor: "transparent !important" }}>
+                      <DropdownItem
+                        css={{ backgroundColor: "transparent !important" }}
+                      >
                         <LinkText
-                          href="/members/id"
+                          href={link}
                           color="blue_6"
                           className="fs-14 fw-500"
                         >
@@ -128,7 +165,10 @@ const MembersTable = () => {
                           View
                         </LinkText>
                       </DropdownItem>
-                      <DropdownItem css={{ backgroundColor: "transparent !important " }}>
+                      <DropdownItem
+                        css={{ backgroundColor: "transparent !important " }}
+                        onClick={() => openDeleteModal(user)}
+                      >
                         <Text color="red" className="fs-14 fw-500">
                           <img
                             src={Delete}
@@ -146,7 +186,19 @@ const MembersTable = () => {
           })}
         </tbody>
       </Table>
-      
+      {loading && (
+        <Text
+          color="blue_6"
+          css={{ position: "absolute", left: "50%", top: "50%" }}
+        >
+          Loading...
+        </Text>
+      )}
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
     </>
   );
 };

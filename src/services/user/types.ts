@@ -42,6 +42,8 @@ export interface IJuniorAdmin extends Document {
   email: string;
   phone: string;
   branch: string
+  results: string
+  adminId: string
   isActive: boolean;
 }
 
@@ -67,7 +69,7 @@ export interface IJuniorAdminApiResponse extends IApiResponse {
 }
 
 export interface IJuniorAdminsApiResponse extends IApiResponse {
-  data: IJuniorAdmin[];
+  data: IJuniorAdmin[] | any;
 }
 
 export interface ILoginUserOptions {
