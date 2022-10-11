@@ -43,7 +43,7 @@ const BranchesTable = () => {
         setLoading(false);
       }
     });
-  }, []);
+  }, [branchApiResponse]);
 
 
   const showAssignModal = () => {
@@ -113,14 +113,7 @@ const BranchesTable = () => {
             })}
           </tr>
         </thead>
-        {loading && (
-          <Text
-            color="blue_6"
-            css={{ position: "absolute", left: "50%", top: "50%" }}
-          >
-            Loading...
-          </Text>
-        )}
+        
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
           {branchValues?.map((result: IBranch, idx) => {
             const fields = [
@@ -281,7 +274,14 @@ const BranchesTable = () => {
           })}
         </tbody>
       </Table>
-
+      {loading && (
+          <Text
+            color="blue_6"
+            css={{ position: "absolute", left: "50%", top: "50%" }}
+          >
+            Loading...
+          </Text>
+        )}
       <ConfirmationModal
         showModal={modals.confirmation.isOpen}
         {...modals.confirmation.props}

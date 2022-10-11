@@ -66,15 +66,18 @@ export const getAllMembers = async (params?: any) => {
   return res;
 };
 
-// export const removeSingleUser = async (id: IJuniorAdmin["_id"]) => {
-//   const res = await Api.delete(`/junior_admin/${id}`);
-//   return res;
-// };
+export const getSingleMember = async (id: any["_id"]) => {
+  const res: IMembersApiResponse = await Api.get(`admin/user/${id}`);
+  return res;
+};
 
-// export const getSingleUser = async (id: IJuniorAdmin["_id"]) => {
-//   const res: IUserApiResponse = await Api.get(`/junior-admin/${id}`);
-//   return res;
-// };
+
+export const deleteSingleMember = async (id: any["_id"]) => {
+  const res = await Api.delete(`admin/user/${id}`);
+  return res;
+};
+
+
 
 // export const updateSingleUser = async (
 //   id: IUser["_id"],

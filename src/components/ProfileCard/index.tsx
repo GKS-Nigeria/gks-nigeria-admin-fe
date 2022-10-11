@@ -10,6 +10,7 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from "reactstrap";
+import { useState, useEffect } from "react";
 import { useTheme } from "@emotion/react";
 import { LinkText, Text } from "../../lib/Text";
 import Location from "../../assets/icons/location.svg";
@@ -17,20 +18,35 @@ import Profile from "../../assets/icons/profile.svg";
 import Ellipsis from "../../assets/icons/ellipsisVertical.svg";
 import Delete from "../../assets/icons/delete.svg";
 import Edit from "../../assets/icons/edit.svg";
-// import { getAllJuniorAdmins } from "../../services/user"
-import { IJuniorAdmin } from "../../services/user/types"
+import { IJuniorAdmin } from "../../services/user/types";
+import { getAllJuniorAdmins } from "../../services/user";
 
-interface ProfileCardProps {
-  data?: IJuniorAdmin[];
-}
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
+const ProfileCard = () => {
   const { palette } = useTheme();
+  
+  const [juniorAdminApiResponse, setJuniorAdminApiResponse] = useState<
+  IJuniorAdmin[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  // const [memberApiResponse, setMemberApiResponse] = useState<any>([]);
 
+  useEffect(() => {
+    getAllJuniorAdmins().then((res) => {
+      setJuniorAdminApiResponse(res.data.results);
+      if (res.success === true) {
+        setLoading(false);
+      }
+    });
+  }, []);
+
+
+
+  // console.log(juniorAdminApiResponse);
 
   return (
     <div className="d-flex flex-wrap ">
-      {data?.map((user: IJuniorAdmin, ) => {
+      {juniorAdminApiResponse?.map((user: IJuniorAdmin) => {
+      
         return (
           <Card
             key={user._id}
@@ -40,7 +56,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
               borderRadius: "10px",
               border: "none",
               backgroundColor: palette.black_3,
-              // padding: "5px"
             }}
             className="d-flex m-4 justify-content-between"
           >
@@ -123,18 +138,26 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
               }}
             >
               {/* <CardTitle tag="h5">John Boyega</CardTitle> */}
-              <Text color="white">{user.firstName}</Text>
+              <Text color="white">{user._id}</Text>
               <CardSubtitle className="mb-3 text-muted" tag="h6">
                 {/* {user.group} */}
               </CardSubtitle>
               <Text color="white" className="fs-14">
                 <img src={Location} alt="" css={{ paddingRight: "8px" }} />
-                {user.branch}
+                {/* {user._id} */}Isolo
               </Text>
             </CardBody>
           </Card>
         );
       })}
+      {loading && (
+        <Text
+          color="blue_6"
+          css={{ position: "absolute", left: "50%", top: "50%" }}
+        >
+          Loading...
+        </Text>
+      )}
     </div>
   );
 };
