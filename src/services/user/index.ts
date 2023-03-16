@@ -77,6 +77,10 @@ export const deleteSingleMember = async (id: any["_id"]) => {
   return res;
 };
 
+export const deleteSingleJuniorAdmin = async (id: any["_id"]) => {
+  const res = await Api.delete(`admin/remove-junior-admin/${id}`);
+  return res;
+};
 
 
 // export const updateSingleUser = async (

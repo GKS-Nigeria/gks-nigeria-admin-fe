@@ -39,11 +39,13 @@ export interface ICreateJuniorAdminOptions {
 export interface IJuniorAdmin extends Document {
   firstName: string;
   lastName: string;
+  name: string;
   email: string;
   phone: string;
-  branch: string
-  results: string
-  adminId: string
+  branch: any;
+  results: string;
+  adminId: any;
+  branchId: any;
   isActive: boolean;
 }
 

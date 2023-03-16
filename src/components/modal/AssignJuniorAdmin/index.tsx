@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import {
   ModalHeader,
   ModalBody,
@@ -14,6 +14,8 @@ import { Text } from "../../../lib/Text";
 import { Button } from "../../../lib/Button";
 import { Modal } from "../../../lib/Modal";
 import { useTheme } from "@emotion/react";
+import { IJuniorAdmin } from "../../../services/user/types";
+import { getAllJuniorAdmins } from "../../../services/user";
 
 interface ModalProps {
   showModal: boolean;
@@ -21,30 +23,32 @@ interface ModalProps {
 }
 
 const AssignModal: React.FC<ModalProps> = ({ showModal, toggle }) => {
-  const [juniorAdmin, setJuniorAdmin] = useState<any[] | null>(null);
-  const [juniorAdminInput, setJuniorAdminInput] = useState("");
-  const [selectedJuniorAdmin, setSelectedJuniorAdmin] = useState<string | null>(
-    null
-  );
+
+  const [juniorAdminApiResponse, setJuniorAdminApiResponse] = useState<
+    IJuniorAdmin[]
+  >([]);
   const { palette } = useTheme();
 
-  const handleSelection = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedJuniorAdmin(e.target.value);
-  };
 
-  const resetModal = () => {
-    setJuniorAdminInput("");
-    setJuniorAdmin([]);
-    setSelectedJuniorAdmin(null);
-  };
+  useEffect(() => {
+    getAllJuniorAdmins().then((res) => {
+      setJuniorAdminApiResponse(res.data.results);
+      if (res.success === true) {
+        // setLoading(false);
+      }
+    });
+  }, []);
 
+  const juniorAdminData = juniorAdminApiResponse.map((item) => {
+    return item.adminId;
+  });
+  console.log(juniorAdminData);
   return (
-    <Modal isOpen={showModal} centered toggle={toggle} onClosed={resetModal}>
+    <Modal isOpen={showModal} centered toggle={toggle}>
       <ModalHeader className="border-0 ">
         <Text color="blue_6" className="fs-22 pr-6 fw-bold text-capitalize">
           Assign
         </Text>
-        
       </ModalHeader>
 
       <ModalBody>
@@ -57,13 +61,17 @@ const AssignModal: React.FC<ModalProps> = ({ showModal, toggle }) => {
               Junior Admin
             </Text>
           </Label>
-          <Input
-            id="juniorAdmin"
-            type="select"
-            value={juniorAdminInput}
-            // onChange={handleChange}
-            placeholder="Junior Admin"
-          />
+          <Input type="select">
+            <option value="">-select-</option>
+
+            {juniorAdminData.map((field, idx) => {
+              return (
+                <option key={idx} value={field._id}>
+                  {field.firstName} {field.lastName}
+                </option>
+              );
+            })}
+          </Input>
         </FormGroup>
       </ModalBody>
       <ModalFooter>

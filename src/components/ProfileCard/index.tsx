@@ -12,17 +12,26 @@ import {
 } from "reactstrap";
 import { useState, useEffect } from "react";
 import { useTheme } from "@emotion/react";
-import { LinkText, Text } from "../../lib/Text";
+import { Text } from "../../lib/Text";
 import Location from "../../assets/icons/location.svg";
 import Profile from "../../assets/icons/profile.svg";
 import Ellipsis from "../../assets/icons/ellipsisVertical.svg";
 import Delete from "../../assets/icons/delete.svg";
-import Edit from "../../assets/icons/edit.svg";
+// import Edit from "../../assets/icons/edit.svg";
 import { IJuniorAdmin } from "../../services/user/types";
-import { getAllJuniorAdmins } from "../../services/user";
+import { deleteSingleJuniorAdmin, getAllJuniorAdmins } from "../../services/user";
+import { toggleModal } from "../../redux/slices/ui";
+import { Modals } from "../../redux/slices/ui/types";
+import ConfirmationModal from "../modal/Confirmation";
+import { useAppSelector, useAppDispatch } from "../../hooks";
 
 const ProfileCard = () => {
   const { palette } = useTheme();
+  const {
+    ui: { modals },
+  } = useAppSelector((state) => state);
+
+  const dispatch = useAppDispatch();
   
   const [juniorAdminApiResponse, setJuniorAdminApiResponse] = useState<
   IJuniorAdmin[]
@@ -39,14 +48,33 @@ const ProfileCard = () => {
     });
   }, []);
 
+  const openDeleteModal = (juniorAdmin: IJuniorAdmin) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleJuniorAdmin(juniorAdmin);
+          },
+          onClosed() {
+            getAllJuniorAdmins();
+          },
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${juniorAdmin.adminId.firstName}? You will permanently loose their data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
 
-
-  // console.log(juniorAdminApiResponse);
+  // console.log(juniorAdminApiResponse[3].branchId.name);
 
   return (
     <div className="d-flex flex-wrap ">
       {juniorAdminApiResponse?.map((user: IJuniorAdmin) => {
-      
         return (
           <Card
             key={user._id}
@@ -86,7 +114,7 @@ const ProfileCard = () => {
                         "0px 0px 0px 1px rgba(152, 161, 179, 0.1), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 5px 15px rgba(0, 0, 0, 0.08)",
                     }}
                   >
-                    <DropdownItem
+                    {/* <DropdownItem
                       css={{ backgroundColor: "transparent !important" }}
                     >
                       <LinkText href="" color="blue_6" className="fs-14 fw-500">
@@ -101,9 +129,10 @@ const ProfileCard = () => {
                         />
                         Edit
                       </LinkText>
-                    </DropdownItem>
+                    </DropdownItem> */}
                     <DropdownItem
                       css={{ backgroundColor: "transparent !important" }}
+                      onClick={() => openDeleteModal(user)}
                     >
                       <Text color="red" className="fs-14 fw-500">
                         <img
@@ -137,14 +166,15 @@ const ProfileCard = () => {
                 maxHeight: "102px",
               }}
             >
-              {/* <CardTitle tag="h5">John Boyega</CardTitle> */}
-              <Text color="white">{user._id}</Text>
+              <Text color="white">{user.adminId.firstName} {user.adminId.lastName}</Text>
               <CardSubtitle className="mb-3 text-muted" tag="h6">
                 {/* {user.group} */}
               </CardSubtitle>
               <Text color="white" className="fs-14">
                 <img src={Location} alt="" css={{ paddingRight: "8px" }} />
-                {/* {user._id} */}Isolo
+            
+                {user.branchId ? user.branchId.name : "Not in a branch"}
+                
               </Text>
             </CardBody>
           </Card>
@@ -158,6 +188,11 @@ const ProfileCard = () => {
           Loading...
         </Text>
       )}
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
     </div>
   );
 };
