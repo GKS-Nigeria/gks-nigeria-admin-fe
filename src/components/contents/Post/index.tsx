@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource @emotion/react */
@@ -54,6 +55,10 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
   });
 
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
+  const [media, setMedia] = useState<any>({
+    preview: "",
+    raw: null,
+  });
 
   useEffect(() => {
     getAllBranch().then((res) => {
@@ -77,6 +82,19 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
 
   const labels = ["title", "body", "branch/groups"];
 
+  const handleChange = (e: any) => {
+    if (e.target.files.length) {
+      setMedia({
+        preview: URL.createObjectURL(e.target.files[0]),
+        raw: e.target.files[0],
+      });
+    }
+  };
+  const triggerFileInput = () => {
+    const hold = document?.getElementById("media_upload");
+    hold?.click();
+  };
+
   const { palette } = useTheme();
   return (
     <>
@@ -95,15 +113,21 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
                 media
               </Text>
             </Label>
+          
             <div
-              css={{
-                border: `1px dashed ${palette.blue_6}`,
-                borderRadius: "8px",
-                backgroundColor: "transparent",
-              }}
-            >
+                css={{
+                  border: `1px dashed ${palette.blue_6}`,
+                  borderRadius: "8px",
+                  backgroundColor: "transparent",
+                  height: "100%"
+                }}
+                >
+                  {media.preview === "" ? (
+                    <span
+                    >
               <label
                 htmlFor="media_upload"
+                
                 className="d-flex justify-content-center flex-column align-items-center"
                 css={{
                   padding: "30px 0",
@@ -128,12 +152,39 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
                   </div>
                 </div>
               </label>
+              
+              </span>
+              ) : (
+                <span 
+                  onClick={triggerFileInput}
+                >
+
+                <embed
+                src={media.preview}
+                type=""
+                height="100%"
+                width="100%"
+              ></embed>
+               <div className="d-flex justify-content-center">
+                  <div className="m-2">
+                    <img src={Image} alt="" width="40"/>
+                  </div>
+                  <div className="m-2">
+                    <img src={Video} alt="" width="40"/>
+                  </div>
+                  <div className="m-2">
+                    <img src={Audio} alt="" width="40"/>
+                  </div>
+                </div>
+                </span>
+              )}
               <input
                 type="file"
                 name="media_upload"
-                id="media_uploaad"
+                id="media_upload"
                 max={1}
                 className="d-none"
+                onChange={handleChange}
               />
             </div>
             {labels.map((label, idx) => {
