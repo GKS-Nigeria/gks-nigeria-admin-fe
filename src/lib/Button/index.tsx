@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button as StrapButton } from "reactstrap";
 import styled from "@emotion/styled";
 import { ThemeColors } from "../../theme/style";
@@ -10,7 +11,7 @@ export const Button = styled(StrapButton)<ButtonProps>((props: any) => ({
   backgroundColor: `${props.theme.palette[props.variant]}`,
   borderColor: "transparent",
   borderRadius: 10,
-  padding: ".9em",
+  padding: ".8em",
   width: "160px",
   height: 50,
   boxShadow: "none !important",

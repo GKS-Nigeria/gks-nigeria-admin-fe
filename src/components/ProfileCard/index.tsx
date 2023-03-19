@@ -10,74 +10,71 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from "reactstrap";
+import { useState, useEffect } from "react";
 import { useTheme } from "@emotion/react";
-import { LinkText, Text } from "../../lib/Text";
+import { Text } from "../../lib/Text";
 import Location from "../../assets/icons/location.svg";
 import Profile from "../../assets/icons/profile.svg";
 import Ellipsis from "../../assets/icons/ellipsisVertical.svg";
 import Delete from "../../assets/icons/delete.svg";
-import Edit from "../../assets/icons/edit.svg";
+// import Edit from "../../assets/icons/edit.svg";
+import { IJuniorAdmin } from "../../services/user/types";
+import { deleteSingleJuniorAdmin, getAllJuniorAdmins } from "../../services/user";
+import { toggleModal } from "../../redux/slices/ui";
+import { Modals } from "../../redux/slices/ui/types";
+import ConfirmationModal from "../modal/Confirmation";
+import { useAppSelector, useAppDispatch } from "../../hooks";
 
-interface ProfileCardProps {
-  data?: any[];
-}
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
+const ProfileCard = () => {
   const { palette } = useTheme();
-  data = [
-    {
-      _id: "1",
-      branch: "Ojota",
-      group: "choir",
-      name: "John Boyega",
-    },
-    {
-      _id: "2",
-      branch: "Ojota",
-      group: "Drummer",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "3",
-      branch: "Isolo",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "4",
-      branch: "Ojota",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "5",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "5",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-    {
-      _id: "5",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
+  const {
+    ui: { modals },
+  } = useAppSelector((state) => state);
 
-    {
-      _id: "5",
-      branch: "Lekki",
-      group: "choir",
-      name: "Joseph Olaitan",
-    },
-  ];
+  const dispatch = useAppDispatch();
+  
+  const [juniorAdminApiResponse, setJuniorAdminApiResponse] = useState<
+  IJuniorAdmin[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  // const [memberApiResponse, setMemberApiResponse] = useState<any>([]);
+
+  useEffect(() => {
+    getAllJuniorAdmins().then((res) => {
+      setJuniorAdminApiResponse(res.data.results);
+      if (res.success === true) {
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  const openDeleteModal = (juniorAdmin: IJuniorAdmin) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleJuniorAdmin(juniorAdmin);
+          },
+          onClosed() {
+            getAllJuniorAdmins();
+          },
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${juniorAdmin.adminId.firstName}? You will permanently loose their data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
+
+  // console.log(juniorAdminApiResponse[3].branchId.name);
+
   return (
     <div className="d-flex flex-wrap ">
-      {data?.map((user) => {
+      {juniorAdminApiResponse?.map((user: IJuniorAdmin) => {
         return (
           <Card
             key={user._id}
@@ -87,7 +84,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
               borderRadius: "10px",
               border: "none",
               backgroundColor: palette.black_3,
-              // padding: "5px"
             }}
             className="d-flex m-4 justify-content-between"
           >
@@ -118,7 +114,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
                         "0px 0px 0px 1px rgba(152, 161, 179, 0.1), 0px 15px 35px -5px rgba(17, 24, 38, 0.15), 0px 5px 15px rgba(0, 0, 0, 0.08)",
                     }}
                   >
-                    <DropdownItem
+                    {/* <DropdownItem
                       css={{ backgroundColor: "transparent !important" }}
                     >
                       <LinkText href="" color="blue_6" className="fs-14 fw-500">
@@ -133,9 +129,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
                         />
                         Edit
                       </LinkText>
-                    </DropdownItem>
+                    </DropdownItem> */}
                     <DropdownItem
                       css={{ backgroundColor: "transparent !important" }}
+                      onClick={() => openDeleteModal(user)}
                     >
                       <Text color="red" className="fs-14 fw-500">
                         <img
@@ -169,19 +166,33 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ data }) => {
                 maxHeight: "102px",
               }}
             >
-              {/* <CardTitle tag="h5">John Boyega</CardTitle> */}
-              <Text color="white">{user.name}</Text>
+              <Text color="white">{user.adminId.firstName} {user.adminId.lastName}</Text>
               <CardSubtitle className="mb-3 text-muted" tag="h6">
-                {user.group}
+                {/* {user.group} */}
               </CardSubtitle>
               <Text color="white" className="fs-14">
-                <img src={Location} alt="" css={{ paddingRight: "6px" }} />
-                {user.branch}
+                <img src={Location} alt="" css={{ paddingRight: "8px" }} />
+            
+                {user.branchId ? user.branchId.name : "Not in a branch"}
+                
               </Text>
             </CardBody>
           </Card>
         );
       })}
+      {loading && (
+        <Text
+          color="blue_6"
+          css={{ position: "absolute", left: "50%", top: "50%" }}
+        >
+          Loading...
+        </Text>
+      )}
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
     </div>
   );
 };

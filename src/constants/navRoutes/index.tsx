@@ -3,7 +3,6 @@
 import {
   Routes,
   Route,
-  Outlet,
   Link,
   useMatch,
   useResolvedPath,
@@ -11,12 +10,10 @@ import {
 import type { LinkProps } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { LinkText } from "../../lib/Text";
-import Admin from "../../assets/icons/juniorAdmin.svg";
-import AdminActive from "../../assets/icons/juniorAdmin-active.svg";
 
-function CustomLink({ children, to, ...props }: LinkProps) {
+function ActiveLinkStyle({ children, to, ...props }: LinkProps) {
   const resolved = useResolvedPath(to);
-  const isActive = useMatch({ path: resolved.pathname, end: true });
+  const isActive = useMatch({ path: resolved.pathname, end: false });
   const { palette } = useTheme();
 
   return (
@@ -36,7 +33,7 @@ function CustomLink({ children, to, ...props }: LinkProps) {
             color: isActive ? palette.white : "blue_6",
             // padding: " 16px 60px"
           }}
-          className="d-flex align-items-center justify-content-start w-100 nav-link fw-500 fs-17 text-capitalize"
+          className="d-flex align-items-start justify-content-start w-100 nav-link fw-500 fs-17 text-capitalize"
         >
           {/* {match && <FaUserAlt/>} */}
           {children}
@@ -49,29 +46,12 @@ function CustomLink({ children, to, ...props }: LinkProps) {
 function Layout() {
   return (
     <div>
-      <nav>
-        <ul css={{ listStyle: "none" }}>
-          <li>
-            <CustomLink to="/junior_admin">
-              {/* <img src={AdminActive} alt=""
-                        css={{ paddingRight: "10px" }}
-                      /> */}
-              Junior Admins
-            </CustomLink>
-          </li>
-          <li>
-            <CustomLink to="/branch">Branches</CustomLink>
-          </li>
-          <li>
-            <CustomLink to="/members">Members</CustomLink>
-          </li>
-          <li>
-            <CustomLink to="/content">Content</CustomLink>
-          </li>
-        </ul>
+      <nav className="mx-2">
+        <ActiveLinkStyle to="/junior_admin">Junior Admins</ActiveLinkStyle>
+        <ActiveLinkStyle to="/branch">Branches</ActiveLinkStyle>
+        <ActiveLinkStyle to="/members">Members</ActiveLinkStyle>
+        <ActiveLinkStyle to="/content">Content</ActiveLinkStyle>
       </nav>
-
-      <Outlet />
     </div>
   );
 }
@@ -81,7 +61,7 @@ const NavRoutes = () => {
     <div>
       <div>
         <Routes>
-          <Route path="/" element={<Layout />}></Route>
+          <Route path="" element={<Layout />}></Route>
         </Routes>
       </div>
     </div>

@@ -70,7 +70,7 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
         >
           <SideNav />
         </div>
-        <div css={{ marginLeft: "310px", paddingTop: "120px",  }}>{children}</div>
+        <div css={{ marginLeft: "308px", paddingTop: "120px",  }}>{children}</div>
       </main>
     </>
   );

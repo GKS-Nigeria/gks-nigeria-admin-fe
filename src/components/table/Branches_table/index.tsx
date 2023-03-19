@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/prop-types */
 /** @jsxImportSource @emotion/react */
 
 import { useTheme } from "@emotion/react";
@@ -18,18 +20,31 @@ import AssignModal from "../../modal/AssignJuniorAdmin";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
 import { toggleModal } from "../../../redux/slices/ui";
 import { Modals } from "../../../redux/slices/ui/types";
+import { IBranch } from "../../../services/branch/types";
+import { useState, useEffect } from "react";
+import { deleteSingleBranch, getAllBranch } from "../../../services/branch";
+import ConfirmationModal from "../../modal/Confirmation";
 
-interface BranchesTableProps {
-  data?: any[];
-}
-
-const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
+const BranchesTable = () => {
   const { palette } = useTheme();
   const {
     ui: { modals },
   } = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
+
+  const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllBranch().then((res) => {
+      setBranchApiResponse(res.data.results);
+      if (res.success === true) {
+        setLoading(false);
+      }
+    });
+  }, [branchApiResponse]);
+
 
   const showAssignModal = () => {
     dispatch(
@@ -39,40 +54,31 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
     );
   };
 
-  data = [
-    {
-      _id: "1",
-      branch: "Ojota",
-      address: "28, Mobolaji Johnson",
-      groups: "6",
-      members: "34",
-      junior_admin: "Joseph Olaitan",
-    },
-    {
-      _id: "2",
-      branch: "Lekki",
-      address: "28, Mobolaji Johnson",
-      groups: "13",
-      members: "231",
-      junior_admin: "Victoria John",
-    },
-    {
-      _id: "3",
-      branch: "Lekki",
-      address: "28, Mobolaji Johnson",
-      groups: "13",
-      members: "231",
-      junior_admin: "Victoria Adams",
-    },
-    {
-      _id: "4",
-      branch: "Isolo",
-      address: "28, Mobolaji Johnson",
-      groups: "24",
-      members: "331",
-      junior_admin: "",
-    },
-  ];
+  const openDeleteModal = (branch: IBranch) => {
+    dispatch(
+      toggleModal({
+        name: Modals.CONFIRMATION,
+        props: {
+          confirmFunction() {
+            return deleteSingleBranch(branch.branch._id);
+          },
+          onClosed() {
+            getAllBranch();
+          },
+          header: "Delete Branch",
+          desc: `Are you sure you want to delete ${branch.branch.name}? You will permanently loose their data`,
+          button: {
+            text: "delete",
+            color: "red",
+          },
+        },
+      })
+    );
+  };
+
+  const branchValues = branchApiResponse.map((results) => {
+    return results;
+  });
 
   const tableHeaders = [
     "#",
@@ -86,7 +92,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
 
   return (
     <>
-      <Table striped hover>
+      <Table striped borderless>
         <thead>
           <tr>
             {tableHeaders.map((header, idx) => {
@@ -98,7 +104,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                   <Text
                     color="blue_6"
                     className="fs-12 text-capitalize"
-                    css={{ fontWeight: 700 }}
+                    css={{ fontWeight: 700, padding: "0px 20px" }}
                   >
                     {header}
                   </Text>
@@ -107,25 +113,28 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
             })}
           </tr>
         </thead>
-        {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
-        <tbody css={{ backgroundColor: "#F7F9FCC", paddingLeft: "40px" }}>
-          {data?.map((user: any) => {
+        
+        <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
+          {branchValues?.map((result: IBranch, idx) => {
             const fields = [
-              user._id,
-              user.branch,
-              user.address,
-              user.groups,
-              user.members,
-              user.junior_admin,
-              // user.option,
+              idx + 1,
+              result.branch.name,
+              result.branch.address,
+              result.groups.length ,
+              result.branch.members.length || "-",
+              result.admins || "-",
             ];
+            const link = `branch/groups/${result.branch._id}`;
 
             return (
-              <tr key={`${user._id}`}>
-                {fields.map((field) => {
-                  if (field === user.groups) {
+              <tr key={`${result.branch._id}`}>
+                {fields.map((field, idx) => {
+                  if (field === result.groups.length) {
                     return (
-                      <td key={`${field}-${user._id}`} className="align-middle">
+                      <td
+                        key={`${idx}-${result.branch._id}`}
+                        className="align-middle"
+                      >
                         <Text
                           as="span"
                           color="white"
@@ -133,6 +142,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                           css={{
                             backgroundColor: palette.blue_6,
                             borderRadius: 5,
+                            margin: "0px 30px",
                           }}
                         >
                           {field}
@@ -141,9 +151,13 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                     );
                   }
                   return (
-                    <td key={`${field}-${user._id}`} className="py-3">
-                      <Text color="blue_6" className="fs-14">
-                        {field ? field : "-"}
+                    <td key={`${idx}-${result.branch._id}`} className="py-3">
+                      <Text
+                        color="blue_6"
+                        className="fs-14"
+                        css={{ padding: "0px 20px" }}
+                      >
+                        {field}
                       </Text>
                     </td>
                   );
@@ -161,7 +175,11 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                       <img
                         src={Option}
                         alt=""
-                        css={{ color: palette.black, fontSize: 22 }}
+                        css={{
+                          color: palette.black,
+                          fontSize: 22,
+                          paddingRight: "20px",
+                        }}
                       />
                     </DropdownToggle>
                     <DropdownMenu
@@ -175,10 +193,10 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                     >
                       <DropdownItem
                         css={{ backgroundColor: "transparent !important" }}
-                        onClick={showAssignModal}
+                        // onClick={showAssignModal}
                       >
                         <LinkText
-                          href=""
+                          href={link}
                           color="blue_6"
                           className="fs-14 fw-500"
                         >
@@ -233,6 +251,7 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
                       </DropdownItem>
                       <DropdownItem
                         css={{ backgroundColor: "transparent !important" }}
+                        onClick={() => openDeleteModal(result)}
                       >
                         <Text color="red" className="fs-14 fw-500">
                           <img
@@ -255,6 +274,20 @@ const BranchesTable: React.FC<BranchesTableProps> = ({ data }) => {
           })}
         </tbody>
       </Table>
+      {loading && (
+          <Text
+            color="blue_6"
+            css={{ position: "absolute", left: "50%", top: "50%" }}
+          >
+            Loading...
+          </Text>
+        )}
+      <ConfirmationModal
+        showModal={modals.confirmation.isOpen}
+        {...modals.confirmation.props}
+        toggle={() => dispatch(toggleModal({ name: Modals.CONFIRMATION }))}
+      />
+
       <AssignModal
         showModal={modals.assignJuniorAdmin?.isOpen}
         toggle={() =>

@@ -8,6 +8,7 @@ import { toggleModal } from "../../redux/slices/ui";
 import { Modals } from "../../redux/slices/ui/types";
 import CreateJuniorAdminModal from "../../components/modal/CreateJuniorAdmin";
 import ProfileCard from "../../components/ProfileCard";
+import { createJuniorAdmin } from "../../services/user";
 
 const JuniorAdmin = () => {
   const {
@@ -20,9 +21,11 @@ const JuniorAdmin = () => {
     dispatch(
       toggleModal({
         name: Modals.CREATE_JUNIOR_ADMIN,
+        props: { createFunction: createJuniorAdmin },
       })
     );
   };
+
   return (
     <div>
       <AdminDashboardLayout pageTitle="Junior Admin">
@@ -40,7 +43,7 @@ const JuniorAdmin = () => {
             Create New
           </Button>
         </div>
-        <section id="juniorAdmin" >
+        <section id="juniorAdmin">
           <ProfileCard />
         </section>
       </AdminDashboardLayout>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Modals, UIState } from "./types";
@@ -6,7 +7,9 @@ const initialState: UIState = {
   modals: {
     [Modals.ASSIGN_JUNIOR_ADMIN]: { isOpen: false, props: null },
     [Modals.CREATE_BRANCH]: { isOpen: false, props: null },
+    [Modals.CREATE_GROUP]: { isOpen: false, props: null },
     [Modals.CREATE_JUNIOR_ADMIN]: { isOpen: false, props: null },
+    [Modals.CONFIRMATION]: { isOpen: false, props: null },
     
   },
   redirectUrl: undefined,
