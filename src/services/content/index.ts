@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Api } from "../../helpers/api";
 import {
     IPostContentOptions,
     IPostContentApiResponse,
     IPostNotificationOptions,
     IPostCalenderActivityOptions,
-    IPostDailyDevotionOptions
+    IPostDailyDevotionOptions,
+    IContentApiResponse
   
 } from "./types";
 
@@ -33,3 +35,17 @@ export const postDailyDevotion= async (data: IPostDailyDevotionOptions) => {
   return res;
 };
 
+export const getAllFeeds = async (params?: any) => {
+  const res: IContentApiResponse = await Api.get("user/feed", { params });
+  return res;
+};
+
+export const getAllAnnouncement = async (params?: any) => {
+  const res: IContentApiResponse = await Api.get("user/announcements", { params });
+  return res;
+};
+
+export const getAllNotifications = async (params?: any) => {
+  const res: IContentApiResponse = await Api.get("user/notifications", { params });
+  return res;
+};
