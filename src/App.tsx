@@ -19,6 +19,9 @@ import Notification from "./pages/content/notification";
 import Calender from "./pages/content/calender";
 import DailyDevotion from "./pages/content/dailyDevotion";
 import Groups from "./pages/branches/groups";
+import RecentFeed from "./pages/content/feed/recentFeed";
+import RecentAnnouncements from "./pages/content/announcement/recentAnnouncement";
+import RecentNotification from "./pages/content/notification/recentNotification";
 
 const { Routes, Route } = require("react-router-dom");
 
@@ -34,8 +37,11 @@ function App() {
             <Route path="branch/groups/:id" element={<Groups />} />
             <Route path="/content" element={<Content />} />
             <Route path="/content/feed" element={<Feed />} />
+            <Route path="/content/recentFeed" element={<RecentFeed />} />
             <Route path="/content/announcement" element={<Announcement />} />
+            <Route path="/content/recentAnnouncement" element={<RecentAnnouncements />} />
             <Route path="/content/notification" element={<Notification />} />
+            <Route path="/content/recentNotification" element={<RecentNotification />} />
             <Route path="/content/calender" element={<Calender />} />
             <Route path="/content/dailyDevotion" element={<DailyDevotion />} />
             <Route path="members" element={<Members />} />
