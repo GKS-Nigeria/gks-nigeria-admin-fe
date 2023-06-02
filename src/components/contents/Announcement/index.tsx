@@ -21,6 +21,12 @@ import { postAnnouncement } from "../../../services/content";
 import { Button } from "../../../lib/Button";
 import { getAllBranch } from "../../../services/branch";
 import { IBranch } from "../../../services/branch/types";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { storage } from "../../../services/firebase";
 
 interface PostProps {
   postContent?: IPost;
@@ -31,6 +37,7 @@ const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
     title: "",
     body: "",
     branchId: "",
+    image: "",
   };
 
   const {
@@ -45,10 +52,20 @@ const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
   } = useFormik({
     initialValues,
     validationSchema: contentSchema,
-    onSubmit(values, { setSubmitting }) {
-      postAnnouncement(values)
+    onSubmit: async (values, { setSubmitting }) => {
+      const storageRef = ref(storage, "images/" + media.raw.name);
+        const uploadTask = uploadBytesResumable(storageRef, media.raw);
+        await uploadTask;
+        const photoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+        values.image = photoUrl;
+        console.log(photoUrl);
+        await postAnnouncement(values)
         .then(() => {
           resetForm();
+          setMedia({
+            preview: "",
+            raw: "",
+          });
         })
         .finally(() => setSubmitting(false));
     },
@@ -78,6 +95,7 @@ const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
     setFieldValue("title", postContent.title, true);
     setFieldValue("body", postContent.body, true);
     setFieldValue("branchId", postContent.branchId, true);
+    setFieldValue("image", postContent.image, true);
   }, [resetForm, setFieldValue, postContent]);
 
   const labels = ["title", "body", "branch/groups"];

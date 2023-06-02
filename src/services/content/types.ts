@@ -3,6 +3,7 @@ import { Document, IApiResponse } from "../../helpers/api/types";
 
 export interface IPostContentOptions {
     [key: string]: string;
+    image: string;
     title: string;
     body: string;
     branchId: string;
@@ -48,6 +49,7 @@ export interface IPostNotificationOptions {
   }
 
   export interface IPost extends Document {
+    image: string;
     title: string;
     body: string;
     icon: string;
