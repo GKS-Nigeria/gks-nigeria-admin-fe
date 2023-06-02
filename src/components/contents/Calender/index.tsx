@@ -20,6 +20,12 @@ import { postCalenderActivity } from "../../../services/content";
 import { Button } from "../../../lib/Button";
 import { getAllBranch } from "../../../services/branch";
 import { IBranch } from "../../../services/branch/types";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { storage } from "../../../services/firebase";
 
 interface PostProps {
   postContent?: IPost;
@@ -34,6 +40,7 @@ const ContentCalender: React.FC<PostProps> = ({ postContent }) => {
     date: "",
     startTime: "",
     endTime: "",
+    image: "",
   };
 
   const {
@@ -48,10 +55,20 @@ const ContentCalender: React.FC<PostProps> = ({ postContent }) => {
   } = useFormik({
     initialValues,
     validationSchema: contentSchema,
-    onSubmit(values, { setSubmitting }) {
-      postCalenderActivity(values)
+    onSubmit: async (values, { setSubmitting }) => {
+      const storageRef = ref(storage, "images/" + media.raw.name);
+        const uploadTask = uploadBytesResumable(storageRef, media.raw);
+        await uploadTask;
+        const photoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+        values.image = photoUrl;
+        console.log(photoUrl);
+        await postCalenderActivity(values)
         .then(() => {
           resetForm();
+          setMedia({
+            preview: "",
+            raw: "",
+          });
         })
         .finally(() => setSubmitting(false));
     },
