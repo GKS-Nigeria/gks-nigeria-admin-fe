@@ -13,7 +13,8 @@ import { createBranch, getAllBranch } from "../../services/branch";
 
 const Branches = () => {
   const [numberOfBranches, setNumberOfBranches] = useState("");
-
+ const role = localStorage.getItem("role")
+ 
   useEffect(() => {
     getAllBranch()
       .then((res) => {
@@ -45,7 +46,9 @@ const Branches = () => {
             Number of Branches: {numberOfBranches}
           </div>
 
-          <Button
+{
+  role === "super-admin" ? 
+<Button
             variant="green"
             className="d-flex align-items-center fs-14 justify-content-center"
             css={{ margin: "0px 22px 22px 2px" }}
@@ -54,6 +57,9 @@ const Branches = () => {
             <img src={Plus} alt="" className="me-2" />
             Create New
           </Button>
+  : ""
+}
+    
         </div>
 
         <section id="members-table">

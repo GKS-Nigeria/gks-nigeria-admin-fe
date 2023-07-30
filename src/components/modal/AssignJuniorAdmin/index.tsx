@@ -66,9 +66,14 @@ const AssignModal: React.FC<ModalProps> = ({ showModal, toggle }) => {
 
             {juniorAdminData.map((field, idx) => {
               return (
-                <option key={idx} value={field._id}>
+                <div key={idx} >
+                  {field ? 
+                  <option key={idx} value={field._id}>
                   {field.firstName} {field.lastName}
                 </option>
+                : ""}
+                </div>
+                
               );
             })}
           </Input>

@@ -21,6 +21,7 @@ import { deleteSingleMember, getAllMembers } from "../../../services/user";
 import { Modals } from "../../../redux/slices/ui/types";
 import { toggleModal } from "../../../redux/slices/ui";
 import { useAppSelector, useAppDispatch } from "../../../hooks";
+import { Input } from "../../../lib/form/Input";
 
 import ConfirmationModal from "../../modal/Confirmation";
 
@@ -34,6 +35,7 @@ const MembersTable = () => {
 
   const [memberApiResponse, setMemberApiResponse] = useState<IMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     getAllMembers().then((res) => {
@@ -69,10 +71,33 @@ const MembersTable = () => {
     return members;
   });
 
+  const filteredValues = memberValues.filter((member: any) => {
+    const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+    const branch = `${member.branch ? member.branch.name : "-"}`.toLowerCase();
+    return fullName.includes(searchQuery.toLowerCase()) || branch.includes(searchQuery.toLowerCase());
+  });
   const tableHeaders = ["ID", "name", "branch", "address", "group", "option"];
 
   return (
     <>
+
+      <div className="mx-4">
+        <Input
+          type="search"
+          placeholder="Search..."
+          css={{
+            paddingTop: 8,
+            paddingBottom: 8,
+            marginBottom: 10,
+            borderRadius: "8px",
+            // paddingLeft: 38,
+            border: "1px solid #9E9E9E",
+            width: "200px",
+          }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <Table striped borderless>
         <thead>
           <tr>
@@ -96,7 +121,7 @@ const MembersTable = () => {
         </thead>
         {/* {loading && <TableLoader colCount={tableHeaders.length} />} */}
         <tbody css={{ backgroundColor: "#F7F9FCCC", paddingLeft: "40px" }}>
-          {memberValues?.map((user: any, idx) => {
+          {filteredValues?.map((user: any, idx) => {
             const fields = [
               idx + 1,
               [user.firstName, " ", user.lastName],
@@ -186,6 +211,11 @@ const MembersTable = () => {
           })}
         </tbody>
       </Table>
+      {filteredValues.length === 0 && (
+  <Text color="blue_6" className="fs-14" css={{ padding: "20px" }}>
+    No results found.
+  </Text>
+)}
       {loading && (
         <Text
           color="blue_6"

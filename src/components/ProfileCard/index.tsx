@@ -70,12 +70,13 @@ const ProfileCard = () => {
     );
   };
 
-  // console.log(juniorAdminApiResponse[3].branchId.name);
-
   return (
     <div className="d-flex flex-wrap ">
       {juniorAdminApiResponse?.map((user: IJuniorAdmin) => {
         return (
+          <div key={user._id}>
+            { user.adminId ?
+            
           <Card
             key={user._id}
             css={{
@@ -158,7 +159,7 @@ const ProfileCard = () => {
                 css={{ margin: "10px 40px 0px 70px" }}
               />
             </div>
-
+              
             <CardBody
               css={{
                 backgroundColor: palette.blue_6,
@@ -177,7 +178,8 @@ const ProfileCard = () => {
                 
               </Text>
             </CardBody>
-          </Card>
+          </Card> : ""}
+          </div>
         );
       })}
       {loading && (
