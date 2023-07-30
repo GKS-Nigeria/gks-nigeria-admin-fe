@@ -80,10 +80,12 @@ const Login = () => {
                 loginUser(values)
                   .then((res) => {
                     if (res.success === true) {
-                      navigate("/junior_admin");
+                      navigate("/content");
                     }
                     const jwtToken = res.data.jwt;
+                    const userRole = res.data.userDetails.role;
                     localStorage.setItem("token", jwtToken);
+                    localStorage.setItem("role", userRole);
                   })
                   .finally(() => setIsSubmitting(false));
               }}

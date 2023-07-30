@@ -8,8 +8,7 @@ import Notification from "../../assets/icons/notifications.svg";
 import Calender from "../../assets/icons/calender.svg";
 import DailyDevotion from "../../assets/icons/dailyDevotion.svg";
 import "./index.css";
-// import { Input } from "../../lib/form/Input";
-// import RecentContentTable from "../../components/table/RecentContent_table";
+
 import {
   DropdownItem,
   DropdownMenu,
@@ -19,6 +18,7 @@ import {
 
 const Content = () => {
   // const { palette } = useTheme();
+  const role = localStorage.getItem("role")
 
   return (
     <div>
@@ -188,40 +188,24 @@ const Content = () => {
                 Calender
               </Text>
             </LinkText>
-            <LinkText color="blue_6" href="content/dailyDevotion">
-              <div className="box">
-                <img src={DailyDevotion} alt="" />
-              </div>
-              <Text
-                color="blue_6"
-                className="fw-500 p-1 d-flex justify-content-center"
-              >
-                Daily Devotion
-              </Text>
-            </LinkText>
+            {
+              role === "super-admin" ?
+                <LinkText color="blue_6" href="content/dailyDevotion">
+                  <div className="box">
+                    <img src={DailyDevotion} alt="" />
+                  </div>
+                  <Text
+                    color="blue_6"
+                    className="fw-500 p-1 d-flex justify-content-center"
+                  >
+                    Daily Devotion
+                  </Text>
+                </LinkText> :
+                ""
+            }
+
           </div>
-          {/* <div>
-            <Text color="blue_6" className="fw-bold mt-4"> Recent</Text>
-            <hr/>
-          </div>
-          
-          <div className="mx-4">
-        <Input
-          type="search"
-          placeholder="Search..."
-          css={{
-            paddingTop: 8,
-            paddingBottom: 8,
-            borderRadius: "8px",
-            // paddingLeft: 38,
-            border: "1px solid #9E9E9E",
-            width: "200px",
-          }}
-        />
-        </div>
-          <section className="my-2">
-            <RecentContentTable />
-          </section> */}
+
         </div>
       </AdminDashboardLayout>
     </div>

@@ -43,7 +43,7 @@ const BranchesTable = () => {
         setLoading(false);
       }
     });
-  }, [branchApiResponse]);
+  }, []);
 
 
   const showAssignModal = () => {
