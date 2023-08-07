@@ -71,6 +71,9 @@ const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
     },
   });
 
+  const adminbranch = localStorage.getItem("adminBranch")
+  const role = localStorage.getItem("role")
+
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
   const [media, setMedia] = useState<any>({
     preview: "",
@@ -248,13 +251,27 @@ const PostAnnouncement: React.FC<PostProps> = ({ postContent }) => {
                       {...getFieldProps(fieldName)}
                     >
                       <option value="">-select-</option>
+                      {role === "superadmin" ? 
                       <option value="all">All</option>
+                      : " "
+                    }
+                     
                       {branchData.map((field, idx) => {
-                        return (
-                          <option key={idx} value={field._id}>
-                            {field.name}
-                          </option>
-                        );
+                        if (adminbranch === field._id) {
+                          return (
+                            <option key={idx} value={field._id}>
+                              {field.name}
+                            </option>
+                          );
+                        }
+                        if (role === "superadmin") {
+                          return (
+                            <option key={idx} value={field._id}>
+                              {field.name}
+                            </option>
+                          );
+                        }
+
                       })}
                     </Input>
 
