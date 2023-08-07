@@ -82,7 +82,15 @@ const Login = () => {
                     if (res.success === true) {
                       navigate("/content");
                     }
-                    const jwtToken = res.data.jwt;
+                    if(res.data.userDetails.role === "admin" && res.data.userDetails.branch !== null) {
+                      const adminBranch = res.data.userDetails.branch._id;
+                      localStorage.setItem("adminBranch", adminBranch);
+                      console.log("a branch exists")
+                    } else {
+                      console.log("no branch here")
+                    }
+
+                   const jwtToken = res.data.jwt;
                     const userRole = res.data.userDetails.role;
                     localStorage.setItem("token", jwtToken);
                     localStorage.setItem("role", userRole);
