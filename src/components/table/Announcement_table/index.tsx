@@ -82,7 +82,7 @@ console.log(announcements)
                 {fields.map((field, idx) => {
                   return (
                     <td key={`${idx}-${announcement._id}`} className="py-3">
-                      <Text color="blue_6">{field ? field : "-"}</Text>
+                      <Text color="blue_6" css={{ maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{field ? field : "-"}</Text>
                     </td>
                   );
                 })}
