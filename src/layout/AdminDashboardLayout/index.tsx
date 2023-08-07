@@ -18,6 +18,7 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
   pageTitle,
 }) => {
   const { palette } = useTheme();
+  const role = localStorage.getItem("role")
 
   return (
     <>
@@ -46,9 +47,16 @@ const AdminDashboardLayout: React.FC<AdminDashboardLayoutProps> = ({
               <Text color="blue_6" className="fs-20 fw-bold text-capitalize">
                 GKS HQ
               </Text>
+              {
+                role === "superadmin" ? 
+                <Text color="blue_6" className="fs-14 text-capitalize">
+                Super Admin
+              </Text> : 
               <Text color="blue_6" className="fs-14 text-capitalize">
-                Administrator
-              </Text>
+              Junior Admin
+            </Text> 
+              }
+              
             </div>
           </div>
           <Text color="blue_6" className="fs-22" css={{ fontWeight: 500 }}>

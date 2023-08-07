@@ -54,12 +54,12 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
     validationSchema: contentSchema,
     onSubmit: async (values, { setSubmitting }) => {
       const storageRef = ref(storage, "images/" + media.raw.name);
-        const uploadTask = uploadBytesResumable(storageRef, media.raw);
-        await uploadTask;
-        const photoUrl = await getDownloadURL(uploadTask.snapshot.ref);
-        values.image = photoUrl;
-        console.log(photoUrl);
-        await postFeed(values)
+      const uploadTask = uploadBytesResumable(storageRef, media.raw);
+      await uploadTask;
+      const photoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+      values.image = photoUrl;
+      console.log(photoUrl);
+      await postFeed(values)
         .then(() => {
           resetForm();
           setMedia({
@@ -71,12 +71,15 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
     },
   });
 
+  const adminbranch = localStorage.getItem("adminBranch")
+  const role = localStorage.getItem("role")
+
   const [branchApiResponse, setBranchApiResponse] = useState<IBranch[]>([]);
   const [media, setMedia] = useState<any>({
     preview: "",
     raw: null,
   });
-  
+
   useEffect(() => {
     getAllBranch().then((res) => {
       setBranchApiResponse(res.data.results);
@@ -131,69 +134,69 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
                 media
               </Text>
             </Label>
-          
+
             <div
-                css={{
-                  border: `1px dashed ${palette.blue_6}`,
-                  borderRadius: "8px",
-                  backgroundColor: "transparent",
-                  height: "100%"
-                }}
+              css={{
+                border: `1px dashed ${palette.blue_6}`,
+                borderRadius: "8px",
+                backgroundColor: "transparent",
+                height: "100%"
+              }}
+            >
+              {media.preview === "" ? (
+                <span
                 >
-                  {media.preview === "" ? (
-                    <span
+                  <label
+                    htmlFor="media_upload"
+
+                    className="d-flex justify-content-center flex-column align-items-center"
+                    css={{
+                      padding: "30px 0",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Text
+                      color="blue_6"
+                      className="fs-13 fw-bold text-capitalize my-2"
                     >
-              <label
-                htmlFor="media_upload"
-                
-                className="d-flex justify-content-center flex-column align-items-center"
-                css={{
-                  padding: "30px 0",
-                  cursor: "pointer",
-                }}
-              >
-                <Text
-                  color="blue_6"
-                  className="fs-13 fw-bold text-capitalize my-2"
-                >
-                  Upload media content
-                </Text>
-                <div className="d-flex">
-                  <div className="m-2">
-                    <img src={Image} alt="" />
-                  </div>
-                  <div className="m-2">
-                    <img src={Video} alt="" />
-                  </div>
-                  <div className="m-2">
-                    <img src={Audio} alt="" />
-                  </div>
-                </div>
-              </label>
-              
-              </span>
+                      Upload media content
+                    </Text>
+                    <div className="d-flex">
+                      <div className="m-2">
+                        <img src={Image} alt="" />
+                      </div>
+                      <div className="m-2">
+                        <img src={Video} alt="" />
+                      </div>
+                      <div className="m-2">
+                        <img src={Audio} alt="" />
+                      </div>
+                    </div>
+                  </label>
+
+                </span>
               ) : (
-                <span 
+                <span
                   onClick={triggerFileInput}
                 >
 
-                <embed
-                src={media.preview}
-                type=""
-                height="100%"
-                width="100%"
-              ></embed>
-               <div className="d-flex justify-content-center">
-                  <div className="m-2">
-                    <img src={Image} alt="" width="40"/>
+                  <embed
+                    src={media.preview}
+                    type=""
+                    height="100%"
+                    width="100%"
+                  ></embed>
+                  <div className="d-flex justify-content-center">
+                    <div className="m-2">
+                      <img src={Image} alt="" width="40" />
+                    </div>
+                    <div className="m-2">
+                      <img src={Video} alt="" width="40" />
+                    </div>
+                    <div className="m-2">
+                      <img src={Audio} alt="" width="40" />
+                    </div>
                   </div>
-                  <div className="m-2">
-                    <img src={Video} alt="" width="40"/>
-                  </div>
-                  <div className="m-2">
-                    <img src={Audio} alt="" width="40"/>
-                  </div>
-                </div>
                 </span>
               )}
               <input
@@ -248,13 +251,27 @@ const PostFeed: React.FC<PostProps> = ({ postContent }) => {
                       {...getFieldProps(fieldName)}
                     >
                       <option value="">-select-</option>
+                      {role === "superadmin" ? 
                       <option value="all">All</option>
+                      : " "
+                    }
+
                       {branchData.map((field, idx) => {
-                        return (
-                          <option key={idx} value={field._id}>
-                            {field.name}
-                          </option>
-                        );
+                        if (adminbranch === field._id) {
+                          return (
+                            <option key={idx} value={field._id}>
+                              {field.name}
+                            </option>
+                          );
+                        }
+                        if (role === "superadmin") {
+                          return (
+                            <option key={idx} value={field._id}>
+                              {field.name}
+                            </option>
+                          );
+                        }
+
                       })}
                     </Input>
 

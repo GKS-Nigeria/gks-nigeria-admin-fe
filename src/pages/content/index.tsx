@@ -128,6 +128,8 @@ const Content = () => {
                 Announcement
               </Text>
             </UncontrolledDropdown>
+            {
+              role === "superadmin" ?
             <UncontrolledDropdown>
               <DropdownToggle
                 css={{
@@ -176,7 +178,7 @@ const Content = () => {
                 Notification
               </Text>
             </UncontrolledDropdown>
-
+            : ""}
             <LinkText color="blue_6" href="content/calender">
               <div className="box">
                 <img src={Calender} alt="" />
@@ -189,7 +191,7 @@ const Content = () => {
               </Text>
             </LinkText>
             {
-              role === "super-admin" ?
+              role === "superadmin" ?
                 <LinkText color="blue_6" href="content/dailyDevotion">
                   <div className="box">
                     <img src={DailyDevotion} alt="" />

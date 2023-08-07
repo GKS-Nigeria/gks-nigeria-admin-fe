@@ -39,6 +39,8 @@ export const requestToken = async (
 
 export const logoutUser = () => {
   removeAuthToken();
+  localStorage.removeItem('role');
+  localStorage.removeItem('adminBranch');
 };
 
 export const loginUser = async (data: ILoginUserOptions) => {

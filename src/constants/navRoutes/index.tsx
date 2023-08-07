@@ -49,15 +49,12 @@ function Layout() {
     <div>
       <nav className="mx-2">
         <ActiveLinkStyle to="/content">Content</ActiveLinkStyle>
-        {role === "super-admin" ? 
+        {role === "superadmin" ? 
+        <>
         <ActiveLinkStyle to="/junior_admin">Junior Admins</ActiveLinkStyle>
-        : ""
-      }
-        {role === "super-admin" ? 
-        // <ActiveLinkStyle to="/junior_admin">Junior Admins</ActiveLinkStyle>
         <ActiveLinkStyle to="/branch">Branches</ActiveLinkStyle>
-        : ""
-      }
+        </>
+        : ""}
         <ActiveLinkStyle to="/members">Members</ActiveLinkStyle>
       </nav>
     </div>
